@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   ShieldCheck,
   Loader2,
+  Camera,
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -66,19 +67,29 @@ export default function ProfilePage() {
         {/* Profile Card matching Figma */}
         <div className="bg-white rounded-3xl border border-gray-200/90 p-6 sm:p-10 shadow-xs space-y-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-700 text-white flex items-center justify-center text-3xl font-extrabold shadow-sm overflow-hidden shrink-0 border-4 border-emerald-50">
-              {session.user.image ? (
-                <Image
-                  src={session.user.image}
-                  alt={session.user.name || "User"}
-                  width={96}
-                  height={96}
-                  unoptimized
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                session.user.name?.charAt(0).toUpperCase() || "ব"
-              )}
+            <div className="relative shrink-0">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-700 text-white flex items-center justify-center text-3xl font-extrabold shadow-sm overflow-hidden border-4 border-emerald-50">
+                {session.user.image ? (
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || "User"}
+                    width={96}
+                    height={96}
+                    unoptimized
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  session.user.name?.charAt(0).toUpperCase() || "ব"
+                )}
+              </div>
+              <Link
+                href="/profile/update"
+                aria-label="প্রোফাইল ছবি যোগ বা পরিবর্তন করুন"
+                title="প্রোফাইল ছবি যোগ বা পরিবর্তন করুন"
+                className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-700 text-white shadow-md transition-colors hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+              >
+                <Camera className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
 
             <div className="space-y-1.5 flex-1">

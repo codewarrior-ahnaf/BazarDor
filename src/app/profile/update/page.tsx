@@ -3,20 +3,63 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useSession, updateUser } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { User, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
+import { User, ArrowLeft, Loader2, CheckCircle2, Camera, X } from "lucide-react";
 
 interface UpdateFormProps {
   initialName: string;
+  initialImage: string | null;
   email: string;
 }
 
-function UpdateForm({ initialName, email }: UpdateFormProps) {
+function UpdateForm({ initialName, initialImage, email }: UpdateFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initialName);
+  const [avatarImage, setAvatarImage] = useState<string | null>(initialImage);
+  const [imageChanged, setImageChanged] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("একটি ছবির ফাইল নির্বাচন করুন");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("ছবির ফাইল ৫ MB-এর কম হতে হবে");
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+    const image = new window.Image();
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      const size = 256;
+      const scale = Math.min(size / image.width, size / image.height);
+      canvas.width = Math.max(1, Math.round(image.width * scale));
+      canvas.height = Math.max(1, Math.round(image.height * scale));
+      const context = canvas.getContext("2d");
+      if (!context) {
+        URL.revokeObjectURL(imageUrl);
+        toast.error("ছবিটি প্রস্তুত করা যায়নি");
+        return;
+      }
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      setAvatarImage(canvas.toDataURL("image/jpeg", 0.82));
+      setImageChanged(true);
+      URL.revokeObjectURL(imageUrl);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(imageUrl);
+      toast.error("ছবিটি খোলা যায়নি");
+    };
+    image.src = imageUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +77,7 @@ function UpdateForm({ initialName, email }: UpdateFormProps) {
       // Calling BetterAuth updateUser method according to documentation
       const res = await updateUser({
         name: name.trim(),
+        ...(imageChanged ? { image: avatarImage } : {}),
       });
 
       if (res?.error) {
@@ -41,7 +85,7 @@ function UpdateForm({ initialName, email }: UpdateFormProps) {
         setErrorMessage(errorText);
         toast.error(errorText);
       } else {
-        toast.success("নাম সফলভাবে পরিবর্তন করা হয়েছে!");
+        toast.success("প্রোফাইলের তথ্য সফলভাবে পরিবর্তন করা হয়েছে!");
         router.push("/profile");
         router.refresh();
       }
@@ -62,7 +106,7 @@ function UpdateForm({ initialName, email }: UpdateFormProps) {
           তথ্য পরিবর্তন করুন
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 mt-1">
-          আপনার প্রোফাইলের নাম হালনাগাদ করতে নিচের ফর্মটি ব্যবহার করুন
+          আপনার নাম ও প্রোফাইল ছবি হালনাগাদ করুন
         </p>
       </div>
 
@@ -73,6 +117,43 @@ function UpdateForm({ initialName, email }: UpdateFormProps) {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col items-center gap-3 pb-2">
+          <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-emerald-50 bg-emerald-700 text-3xl font-bold text-white shadow-sm flex items-center justify-center">
+            {avatarImage ? (
+              <Image src={avatarImage} alt="প্রোফাইল ছবির প্রিভিউ" width={96} height={96} unoptimized className="h-full w-full object-cover" />
+            ) : (
+              name.trim().charAt(0).toUpperCase() || <User className="h-9 w-9" />
+            )}
+          </div>
+          <p className="text-xs font-medium text-gray-600">
+            নিজের ছবি যোগ করতে নিচের বাটনে চাপ দিন
+          </p>
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="profile-image"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800 transition-colors hover:bg-emerald-100"
+            >
+              <Camera className="h-4 w-4" />
+              ছবি যোগ / পরিবর্তন
+            </label>
+            {avatarImage && (
+              <button
+                type="button"
+                onClick={() => {
+                  setAvatarImage(null);
+                  setImageChanged(true);
+                }}
+                className="inline-flex items-center gap-1 rounded-lg px-2 py-2 text-xs font-medium text-rose-700 hover:bg-rose-50"
+              >
+                <X className="h-4 w-4" />
+                সরান
+              </button>
+            )}
+          </div>
+          <input id="profile-image" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" />
+          <p className="text-center text-[11px] text-gray-500">সর্বোচ্চ ৫ MB; ছবিটি স্বয়ংক্রিয়ভাবে ছোট করা হবে</p>
+        </div>
+
         <div>
           <label
             htmlFor="name"
@@ -171,6 +252,7 @@ export default function UpdateProfilePage() {
 
         <UpdateForm
           initialName={session.user.name || ""}
+          initialImage={session.user.image || null}
           email={session.user.email || ""}
         />
       </div>
