@@ -19,7 +19,7 @@ interface NavbarProps {
 export default function Navbar({ categories, tickerProducts = [] }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, isPending: isSessionPending, error: sessionError } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [banglaDate] = useState(() => getBanglaDate());
@@ -146,6 +146,11 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                   </div>
                 )}
               </div>
+            ) : isSessionPending && !sessionError ? (
+              <div
+                aria-label="সেশন যাচাই হচ্ছে"
+                className="h-9 w-36 animate-pulse rounded-xl bg-gray-100"
+              />
             ) : (
               <div className="flex items-center gap-2 sm:gap-3">
                 <Link
