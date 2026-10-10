@@ -4,13 +4,13 @@ import { ArrowDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50/70 via-white to-transparent py-10 sm:py-16 border-b border-emerald-100/60">
+    <section id="hero-section" className="relative overflow-hidden bg-gradient-to-b from-emerald-50/70 via-white to-transparent py-10 sm:py-16 border-b border-emerald-100/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Text Content */}
           <div className="lg:col-span-7 flex flex-col items-start space-y-4 sm:space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-xs sm:text-sm font-semibold tracking-wide">
-              <span>🌾</span>
+              <span>🛒</span>
               <span>নিত্যপ্রয়োজনীয় পণ্যের বাজার দর</span>
             </div>
 
