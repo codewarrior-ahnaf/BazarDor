@@ -6,8 +6,6 @@ import CategoryClient from "./CategoryClient";
 import { getCategories, getCategoryBySlug, getProducts } from "@/lib/api";
 import { AlertCircle } from "lucide-react";
 
-export const revalidate = 60;
-
 interface CategoryPageProps {
   params: Promise<{
     slug: string;

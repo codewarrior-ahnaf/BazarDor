@@ -6,9 +6,6 @@ import ProductDetailsClient from "./ProductDetailsClient";
 import { getCategories, getProductBySlugOrId, getProducts } from "@/lib/api";
 import { AlertCircle } from "lucide-react";
 
-export const revalidate = 60;
-export const dynamicParams = true;
-
 interface ProductPageProps {
   params: Promise<{
     slug: string;

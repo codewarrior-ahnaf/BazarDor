@@ -6,8 +6,6 @@ import ProductCard from "@/components/ProductCard";
 import { getCategories, getProducts } from "@/lib/api";
 import { TrendingUp, TrendingDown, LayoutGrid } from "lucide-react";
 
-export const revalidate = 60;
-
 export default async function HomePage() {
   const [categories, products] = await Promise.all([
     getCategories(),
