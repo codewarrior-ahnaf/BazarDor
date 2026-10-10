@@ -5,13 +5,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp, signIn } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, Check, Circle, AtSign, ShoppingCart } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, Check, Circle, ShoppingCart } from "lucide-react";
+
+function usernameFromName(name: string) {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}_.-]+/gu, "_")
+    .replace(/_{2,}/g, "_")
+    .replace(/^[_\-.]+|[_\-.]+$/g, "");
+}
 
 export default function SignUpPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -30,15 +38,16 @@ export default function SignUpPage() {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!name.trim() || !username.trim() || !email.trim() || !password) {
+    if (!name.trim() || !email.trim() || !password) {
       const msg = "সকল প্রয়োজনীয় তথ্য পূরণ করুন";
       setErrorMessage(msg);
       toast.error(msg);
       return;
     }
 
-    if (!/^[a-zA-Z0-9_.]{3,30}$/.test(username.trim())) {
-      const msg = "ইউজারনেম ৩-৩০ অক্ষরের হতে হবে এবং শুধু ইংরেজি অক্ষর, সংখ্যা, _ বা . ব্যবহার করা যাবে";
+    const username = usernameFromName(name);
+    if (!username || name.trim().length > 64 || username.length > 64) {
+      const msg = "নামটি থেকে গ্রহণযোগ্য ইউজারনেম তৈরি করা যাচ্ছে না";
       setErrorMessage(msg);
       toast.error(msg);
       return;
@@ -55,7 +64,7 @@ export default function SignUpPage() {
     try {
       const res = await signUp.email({
         name: name.trim(),
-        username: username.trim().toLowerCase(),
+        username,
         email: email.trim(),
         password,
       });
@@ -63,7 +72,7 @@ export default function SignUpPage() {
       if (res?.error) {
         const errorText =
           res.error.code === "USERNAME_IS_ALREADY_TAKEN"
-            ? "এই ইউজারনেমটি আগে থেকেই ব্যবহার করা হয়েছে"
+            ? "এই নামটি দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট তৈরি হয়েছে"
             : res.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
               ? "এই ইমেইলটি আগে থেকেই ব্যবহার করা হয়েছে"
               : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";
@@ -137,42 +146,14 @@ export default function SignUpPage() {
                   id="name"
                   type="text"
                   required
+                  maxLength={64}
+                  autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="আপনার নাম লিখুন (যেমন: আবির হাসান)"
                   className="block w-full pl-10 pr-3.5 py-2.5 sm:py-3 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 />
               </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
-              >
-                ইউজারনেম
-              </label>
-              <div className="relative rounded-xl shadow-2xs">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                  <AtSign className="w-4 h-4" />
-                </div>
-                <input
-                  id="username"
-                  type="text"
-                  required
-                  minLength={3}
-                  maxLength={30}
-                  pattern="[A-Za-z0-9_.]+"
-                  autoComplete="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="যেমন: abir_hasan"
-                  className="block w-full pl-10 pr-3.5 py-2.5 sm:py-3 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                />
-              </div>
-              <p className="mt-1 text-xs text-gray-500">
-                ৩-৩০ অক্ষর; ইংরেজি অক্ষর, সংখ্যা, _ এবং . ব্যবহার করুন
-              </p>
             </div>
 
             <div>

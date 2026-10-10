@@ -55,8 +55,9 @@ function createAuth(state: MongoState) {
     user: { changeEmail: { enabled: true } },
     plugins: [
       username({
-        minUsernameLength: 3,
-        maxUsernameLength: 30,
+        minUsernameLength: 1,
+        maxUsernameLength: 64,
+        usernameValidator: (value) => /^[\p{L}\p{N}_.-]+$/u.test(value),
       }),
     ],
   });
