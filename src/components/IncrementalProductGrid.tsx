@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Product } from "@/types";
 import ProductCard from "@/components/ProductCard";
+import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 
 interface IncrementalProductGridProps {
   products: Product[];
@@ -20,7 +21,10 @@ export default function IncrementalProductGrid({
   const [visibleCount, setVisibleCount] = useState(() =>
     Math.min(initialCount, products.length)
   );
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const isLoadingMoreRef = useRef(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const loadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasMore = visibleCount < products.length;
 
   useEffect(() => {
@@ -29,15 +33,24 @@ export default function IncrementalProductGrid({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (!entry.isIntersecting || isLoadingMoreRef.current) return;
+
+        isLoadingMoreRef.current = true;
+        setIsLoadingMore(true);
+        loadTimerRef.current = setTimeout(() => {
           setVisibleCount((count) => Math.min(count + batchSize, products.length));
-        }
+          setIsLoadingMore(false);
+          isLoadingMoreRef.current = false;
+        }, 350);
       },
-      { rootMargin: "400px 0px" }
+      { rootMargin: "240px 0px" }
     );
 
     observer.observe(target);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
+    };
   }, [batchSize, hasMore, products.length, visibleCount]);
 
   return (
@@ -52,10 +65,23 @@ export default function IncrementalProductGrid({
           ref={loadMoreRef}
           role="status"
           aria-live="polite"
-          className="flex min-h-12 items-center justify-center text-sm text-gray-500"
+          aria-busy={isLoadingMore}
+          className="pt-5"
         >
-          <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-700" />
-          আরও পণ্য লোড হচ্ছে…
+          {isLoadingMore ? (
+            <>
+              <span className="sr-only">আরও পণ্য লোড হচ্ছে</span>
+              <div className={`grid ${gridClassName}`}>
+                {Array.from({ length: Math.min(batchSize, products.length - visibleCount) }).map((_, index) => (
+                  <ProductCardSkeleton key={`loading-${visibleCount}-${index}`} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <span className="block py-2 text-center text-xs text-gray-400">
+              নিচে স্ক্রল করলে আরও পণ্য দেখানো হবে
+            </span>
+          )}
         </div>
       )}
     </>

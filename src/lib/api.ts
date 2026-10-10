@@ -12,7 +12,7 @@ async function fetchFromEndpoints<T>(endpoint: string): Promise<T> {
   for (const baseUrl of API_BASE_URLS) {
     try {
       const response = await fetch(`${baseUrl}${endpoint}`, {
-        next: { revalidate: 60 },
+        cache: "no-store",
       });
       if (!response.ok) {
         failures.push(`${baseUrl}: HTTP ${response.status}`);
