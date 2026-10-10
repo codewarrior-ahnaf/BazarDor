@@ -29,7 +29,7 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f7faf7]">
-      <Navbar categories={categories} tickerProducts={allProducts} />
+      <Navbar categories={categories} tickerProducts={allProducts} initialAuthenticated />
       <main className="flex-1">
         <ProductDetailsClient product={product} />
       </main>

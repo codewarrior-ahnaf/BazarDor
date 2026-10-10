@@ -5,14 +5,16 @@ import Hero from "@/components/Hero";
 import IncrementalProductGrid from "@/components/IncrementalProductGrid";
 import { getCategories, getProducts } from "@/lib/api";
 import { toBnNum } from "@/lib/bangla";
+import { hasAuthSessionCookie } from "@/lib/server-auth-state";
 import { TrendingUp, TrendingDown, LayoutGrid } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [categories, products] = await Promise.all([
+  const [categories, products, initialAuthenticated] = await Promise.all([
     getCategories(),
     getProducts(),
+    hasAuthSessionCookie(),
   ]);
 
   // Section A: Top 6 Risers (দাম বেড়েছে)
@@ -29,7 +31,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f7faf7]">
-      <Navbar categories={categories} tickerProducts={products} />
+      <Navbar categories={categories} tickerProducts={products} initialAuthenticated={initialAuthenticated} />
 
       <main className="flex-1">
         {/* Hero Section */}

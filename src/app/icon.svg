@@ -1,3 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Noto Color Emoji, Apple Color Emoji, sans-serif" font-size="52">🛒</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#047857"/>
+  <path d="M15 20h5l4.3 24.1a4 4 0 0 0 3.9 3.3h19.1a4 4 0 0 0 3.9-3.2L55 29H23" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 34h23M29 41h19M34 30l2 13M44 30l-1 13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="31" cy="53" r="3" fill="#fff"/>
+  <circle cx="47" cy="53" r="3" fill="#fff"/>
 </svg>

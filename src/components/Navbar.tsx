@@ -14,9 +14,10 @@ import { User, LogOut, Edit3, ChevronDown } from "lucide-react";
 interface NavbarProps {
   categories: Category[];
   tickerProducts?: Product[];
+  initialAuthenticated: boolean;
 }
 
-export default function Navbar({ categories, tickerProducts = [] }: NavbarProps) {
+export default function Navbar({ categories, tickerProducts = [], initialAuthenticated }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, isPending: isSessionPending, error: sessionError } = useSession();
@@ -92,7 +93,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                   </div>
                   <div className="hidden sm:block">
                     <p className="max-w-32 truncate text-xs font-semibold leading-tight text-gray-800 sm:max-w-36">
-                        {toBnNum(session.user.name || "ব্যবহারকারী")}
+                      {toBnNum(session.user.name || "ব্যবহারকারী")}
                     </p>
                   </div>
                   <ChevronDown
@@ -104,7 +105,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw_-_1.5rem)] rounded-2xl border border-gray-100 bg-white py-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-1.5rem)] rounded-2xl border border-gray-100 bg-white py-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="px-4 py-2.5 border-b border-gray-100">
                       <p className="text-xs text-gray-700">লগইন করা আছে</p>
                       <p className="text-sm font-semibold text-gray-800 truncate">
@@ -146,8 +147,22 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                   </div>
                 )}
               </div>
+            ) : isSessionPending && !sessionError && initialAuthenticated ? (
+              <div
+                aria-label="সেশন যাচাই হচ্ছে"
+                className="flex h-13 items-center gap-2.5 rounded-xl border border-gray-200 bg-white px-3 py-1.5 sm:h-14"
+              >
+                <div className="h-8 w-8 shrink-0 animate-pulse rounded-full bg-emerald-100" />
+                <div className="hidden w-33 animate-pulse sm:block">
+                  <div className="h-3 w-full rounded bg-gray-200" />
+                </div>
+                <div className="h-4 w-4 shrink-0 animate-pulse rounded bg-gray-200" />
+              </div>
             ) : isSessionPending && !sessionError ? (
-              <div aria-label="সেশন যাচাই হচ্ছে" className="flex items-center gap-2 sm:gap-3">
+              <div
+                aria-label="সেশন যাচাই হচ্ছে"
+                className="flex items-center gap-2 sm:gap-3"
+              >
                 <div className="h-8 w-16 animate-pulse rounded-xl bg-gray-100 sm:h-9 sm:w-20" />
                 <div className="h-8 w-20 animate-pulse rounded-xl bg-emerald-100 sm:h-9 sm:w-24" />
               </div>
