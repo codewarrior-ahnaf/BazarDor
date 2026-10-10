@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductDetailsClient from "./ProductDetailsClient";
 import { getCategories, getProductBySlugOrId, getProducts } from "@/lib/api";
-import { auth, connectMongo } from "@/lib/auth";
+import { getAuth, connectMongo } from "@/lib/auth";
 
 interface ProductPageProps {
   params: Promise<{
@@ -16,7 +16,7 @@ interface ProductPageProps {
 export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const { slug } = await params;
   await connectMongo();
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getAuth().api.getSession({ headers: await headers() });
   if (!session) redirect(`/signin?redirect=${encodeURIComponent(`/product/${slug}`)}`);
 
   const [categories, product, allProducts] = await Promise.all([
