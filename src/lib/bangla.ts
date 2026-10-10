@@ -98,10 +98,23 @@ const bnMonths = [
  * Returns formatted Bengali Date: e.g. "শনিবার, ১০ অক্টোবর ২০২৬"
  */
 export function getBanglaDate(date = new Date()): string {
-  const dayName = bnDays[date.getDay()];
-  const day = toBnNum(date.getDate());
-  const monthName = bnMonths[date.getMonth()];
-  const year = toBnNum(date.getFullYear());
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Dhaka",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).formatToParts(date);
+  const part = (type: "year" | "month" | "day") =>
+    Number(parts.find((item) => item.type === type)?.value);
+  const yearValue = part("year");
+  const monthValue = part("month");
+  const dayValue = part("day");
+  const dhakaDate = new Date(Date.UTC(yearValue, monthValue - 1, dayValue));
+
+  const dayName = bnDays[dhakaDate.getUTCDay()];
+  const day = toBnNum(dayValue);
+  const monthName = bnMonths[monthValue - 1];
+  const year = toBnNum(yearValue);
 
   return `${dayName}, ${day} ${monthName} ${year}`;
 }
