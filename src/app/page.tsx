@@ -58,8 +58,8 @@ export default async function HomePage() {
 
               <IncrementalProductGrid
                 products={risers}
-                initialCount={4}
-                batchSize={4}
+                initialCount={6}
+                batchSize={6}
                 gridClassName="grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6"
               />
             </section>
@@ -87,8 +87,8 @@ export default async function HomePage() {
 
               <IncrementalProductGrid
                 products={fallers}
-                initialCount={4}
-                batchSize={4}
+                initialCount={6}
+                batchSize={6}
                 gridClassName="grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6"
               />
             </section>

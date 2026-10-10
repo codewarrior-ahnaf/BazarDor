@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Product } from "@/types";
 import ProductCard from "@/components/ProductCard";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
+
+const subscribeToHydration = () => () => {};
+const getClientHydrationSnapshot = () => true;
+const getServerHydrationSnapshot = () => false;
 
 interface IncrementalProductGridProps {
   products: Product[];
@@ -18,6 +22,11 @@ export default function IncrementalProductGrid({
   batchSize = 8,
   gridClassName = "grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4",
 }: IncrementalProductGridProps) {
+  const isHydrated = useSyncExternalStore(
+    subscribeToHydration,
+    getClientHydrationSnapshot,
+    getServerHydrationSnapshot
+  );
   const [visibleCount, setVisibleCount] = useState(() =>
     Math.min(initialCount, products.length)
   );
@@ -29,7 +38,7 @@ export default function IncrementalProductGrid({
 
   useEffect(() => {
     const target = loadMoreRef.current;
-    if (!target || !hasMore) return;
+    if (!isHydrated || !target || !hasMore) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -51,14 +60,18 @@ export default function IncrementalProductGrid({
       observer.disconnect();
       if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
     };
-  }, [batchSize, hasMore, products.length, visibleCount]);
+  }, [batchSize, hasMore, isHydrated, products.length, visibleCount]);
 
   return (
     <>
-      <div className={`grid ${gridClassName}`}>
-        {products.slice(0, visibleCount).map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      <div className={`grid ${gridClassName}`} aria-busy={!isHydrated || isLoadingMore}>
+        {!isHydrated
+          ? Array.from({ length: Math.min(initialCount, products.length) }).map((_, index) => (
+              <ProductCardSkeleton key={`initial-${index}`} />
+            ))
+          : products
+              .slice(0, visibleCount)
+              .map((product) => <ProductCard key={product.id} product={product} />)}
       </div>
       {hasMore && (
         <div
