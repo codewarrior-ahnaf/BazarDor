@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { username } from "better-auth/plugins";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
@@ -6,6 +7,7 @@ type MongoState = {
   uri: string;
   client: MongoClient;
   connection?: Promise<MongoClient>;
+  usernameMigration?: Promise<void>;
 };
 
 const globalForMongo = globalThis as typeof globalThis & {
@@ -13,13 +15,26 @@ const globalForMongo = globalThis as typeof globalThis & {
 };
 
 function createAuth(state: MongoState) {
+  const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+
   return betterAuth({
     database: mongodbAdapter(
       state.client.db(process.env.MONGODB_DATABASE || "bazardor"),
       { client: state.client },
     ),
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    baseURL,
+    trustedOrigins: [baseURL],
     secret: process.env.BETTER_AUTH_SECRET!,
+    rateLimit: {
+      enabled: true,
+      storage: "database",
+      window: 60,
+      max: 100,
+      customRules: {
+        "/sign-in/email": { window: 60, max: 10 },
+        "/sign-up/email": { window: 60, max: 5 },
+      },
+    },
     emailAndPassword: {
       enabled: true,
       minPasswordLength: 8,
@@ -38,6 +53,12 @@ function createAuth(state: MongoState) {
       },
     },
     user: { changeEmail: { enabled: true } },
+    plugins: [
+      username({
+        minUsernameLength: 3,
+        maxUsernameLength: 30,
+      }),
+    ],
   });
 }
 
@@ -82,5 +103,35 @@ export async function connectMongo(): Promise<MongoClient> {
     });
     mongo.connection = connection;
   }
-  return mongo.connection;
+  const client = await mongo.connection;
+
+  if (!mongo.usernameMigration) {
+    const legacyUsername = {
+      $concat: ["user_", { $toString: "$_id" }],
+    };
+    const migration = client
+      .db(process.env.MONGODB_DATABASE || "bazardor")
+      .collection("user")
+      .updateMany(
+        { username: { $exists: false } },
+        [
+          {
+            $set: {
+              username: legacyUsername,
+              displayUsername: legacyUsername,
+            },
+          },
+        ],
+      )
+      .then(() => undefined);
+    mongo.usernameMigration = migration;
+    migration.catch(() => {
+      if (mongo.usernameMigration === migration) {
+        mongo.usernameMigration = undefined;
+      }
+    });
+  }
+
+  await mongo.usernameMigration;
+  return client;
 }

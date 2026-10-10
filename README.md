@@ -81,6 +81,8 @@ BETTER_AUTH_DB_URL=mongodb+srv://<username>:<password>@<cluster>/?retryWrites=tr
 
 Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `BETTER_AUTH_DB_URL` আবশ্যক। Database নাম আলাদা করে না দিলে অ্যাপ `bazardor` database ব্যবহার করে। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `BETTER_AUTH_DB_URL`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
 
+নিবন্ধনের সময় ৩-৩০ অক্ষরের unique ইউজারনেম (ইংরেজি অক্ষর, সংখ্যা, `_`, `.`) এবং unique ইমেইল ব্যবহার করতে হবে। ইউজারনেম ছোট হাতের অক্ষরে সংরক্ষিত হয়; ইতিমধ্যে ব্যবহৃত ইউজারনেম বা ইমেইলে toast দেখানো হয়। আগে থেকে থাকা account-এ username না থাকলে MongoDB-তে প্রথম auth connection-এ `user_<id>` username স্বয়ংক্রিয়ভাবে বসে; email/password login অপরিবর্তিত থাকে। একাধিক ব্যবহারকারী একই পাসওয়ার্ড ব্যবহার করতে পারেন—Better Auth প্রতিটি অ্যাকাউন্টের পাসওয়ার্ড আলাদাভাবে hash করে। Auth API-তে rate limiting চালু আছে।
+
 ### ৩. ডেভেলপমেন্ট সার্ভার চালু করুন:
 ```bash
 npm run dev

@@ -5,12 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp, signIn } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, Check, Circle } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, Check, Circle, AtSign, ShoppingCart } from "lucide-react";
 
 export default function SignUpPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,8 +30,15 @@ export default function SignUpPage() {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!name || !email || !password) {
+    if (!name.trim() || !username.trim() || !email.trim() || !password) {
       const msg = "সকল প্রয়োজনীয় তথ্য পূরণ করুন";
+      setErrorMessage(msg);
+      toast.error(msg);
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_.]{3,30}$/.test(username.trim())) {
+      const msg = "ইউজারনেম ৩-৩০ অক্ষরের হতে হবে এবং শুধু ইংরেজি অক্ষর, সংখ্যা, _ বা . ব্যবহার করা যাবে";
       setErrorMessage(msg);
       toast.error(msg);
       return;
@@ -46,15 +54,19 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       const res = await signUp.email({
-        name,
-        email,
+        name: name.trim(),
+        username: username.trim().toLowerCase(),
+        email: email.trim(),
         password,
       });
 
       if (res?.error) {
         const errorText =
-          res.error.message ||
-          "নিবন্ধন ব্যর্থ হয়েছে। এই ইমেইলটি হয়তো ইতিমধ্যেই ব্যবহৃত হচ্ছে।";
+          res.error.code === "USERNAME_IS_ALREADY_TAKEN"
+            ? "এই ইউজারনেমটি আগে থেকেই ব্যবহার করা হয়েছে"
+            : res.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
+              ? "এই ইমেইলটি আগে থেকেই ব্যবহার করা হয়েছে"
+              : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";
         setErrorMessage(errorText);
         toast.error(errorText);
       } else {
@@ -62,9 +74,8 @@ export default function SignUpPage() {
         // Requirement: "If the user Register successfully then navigate him to his login page."
         router.push("/signin");
       }
-    } catch (err: unknown) {
-      const errObj = err as { message?: string };
-      const msg = errObj?.message || "নিবন্ধন সম্পন্ন করা সম্ভব হয়নি";
+    } catch {
+      const msg = "নিবন্ধন সম্পন্ন করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
       setErrorMessage(msg);
       toast.error(msg);
     } finally {
@@ -89,7 +100,7 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-[#f7faf7] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center px-4">
         <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
-          <span className="text-3xl">🛒</span>
+          <ShoppingCart className="h-7 w-7 text-emerald-700" aria-hidden="true" />
           <span className="text-2xl font-black text-emerald-800 group-hover:text-emerald-700 transition-colors">
             বাজার দর
           </span>
@@ -132,6 +143,36 @@ export default function SignUpPage() {
                   className="block w-full pl-10 pr-3.5 py-2.5 sm:py-3 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 />
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1"
+              >
+                ইউজারনেম
+              </label>
+              <div className="relative rounded-xl shadow-2xs">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <AtSign className="w-4 h-4" />
+                </div>
+                <input
+                  id="username"
+                  type="text"
+                  required
+                  minLength={3}
+                  maxLength={30}
+                  pattern="[A-Za-z0-9_.]+"
+                  autoComplete="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="যেমন: abir_hasan"
+                  className="block w-full pl-10 pr-3.5 py-2.5 sm:py-3 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                ৩-৩০ অক্ষর; ইংরেজি অক্ষর, সংখ্যা, _ এবং . ব্যবহার করুন
+              </p>
             </div>
 
             <div>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { Lock, Mail, ArrowRight, Loader2, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, ArrowRight, Loader2, Eye, EyeOff, ShoppingCart } from "lucide-react";
 
 function SignInForm() {
   const router = useRouter();
@@ -73,7 +73,7 @@ function SignInForm() {
     <div className="min-h-screen bg-[#f7faf7] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center px-4">
         <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
-          <span className="text-3xl">🛒</span>
+          <ShoppingCart className="h-7 w-7 text-emerald-700" aria-hidden="true" />
           <span className="text-2xl font-black text-emerald-800 group-hover:text-emerald-700 transition-colors">
             বাজার দর
           </span>

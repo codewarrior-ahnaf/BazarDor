@@ -9,7 +9,7 @@ import { Category, Product } from "@/types";
 import { getBanglaDate, toBnNum } from "@/lib/bangla";
 import PriceTicker from "./PriceTicker";
 import toast from "react-hot-toast";
-import { User, LogOut, Edit3, ChevronDown } from "lucide-react";
+import { User, LogOut, Edit3, ChevronDown, ShoppingCart } from "lucide-react";
 
 interface NavbarProps {
   categories: Category[];
@@ -58,7 +58,10 @@ export default function Navbar({ categories, tickerProducts = [], initialAuthent
           {/* Logo & Bangla Date */}
           <Link href="/" className="flex flex-col group py-1">
             <div className="flex items-center gap-2">
-              <span className="text-2xl sm:text-3xl">🛒</span>
+              <ShoppingCart
+                className="h-6 w-6 text-emerald-700 sm:h-7 sm:w-7"
+                aria-hidden="true"
+              />
               <span className="text-xl sm:text-2xl font-bold tracking-tight text-emerald-800 group-hover:text-emerald-700 transition-colors">
                 বাজার দর
               </span>
