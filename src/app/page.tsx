@@ -5,7 +5,6 @@ import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import { getCategories, getProducts } from "@/lib/api";
 import { TrendingUp, TrendingDown, LayoutGrid } from "lucide-react";
-import ScrollProgress from "@/components/ScrollProgress";
 
 export default async function HomePage() {
   const [categories, products] = await Promise.all([
@@ -30,7 +29,6 @@ export default async function HomePage() {
       <Navbar categories={categories} tickerProducts={products} />
 
       <main className="flex-1">
-        <ScrollProgress />
         {/* Hero Section */}
         <Hero />
 

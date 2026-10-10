@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
+import ScrollProgress from "@/components/ScrollProgress";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="bn" className="scroll-smooth">
-      <body className="min-h-screen flex flex-col bg-[#f7faf7] text-gray-900 antialiased selection:bg-emerald-100 selection:text-emerald-900">
+      <body id="page-content" className="min-h-screen flex flex-col bg-[#f7faf7] text-gray-900 antialiased selection:bg-emerald-100 selection:text-emerald-900">
         <Toaster
           position="top-right"
           toastOptions={{
@@ -33,6 +34,7 @@ export default function RootLayout({
             },
           }}
         />
+        <ScrollProgress />
         {children}
       </body>
     </html>
