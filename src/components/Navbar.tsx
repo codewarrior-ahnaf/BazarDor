@@ -158,7 +158,7 @@ export default function Navbar({ categories, tickerProducts = [], initialAuthent
                 </div>
                 <div className="h-4 w-4 shrink-0 animate-pulse rounded bg-gray-200" />
               </div>
-            ) : isSessionPending && !sessionError ? (
+            ) : isSessionPending && !sessionError && initialAuthenticated ? (
               <div
                 aria-label="সেশন যাচাই হচ্ছে"
                 className="flex items-center gap-2 sm:gap-3"
