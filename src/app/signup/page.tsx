@@ -80,6 +80,8 @@ export default function SignUpPage() {
           const errorText =
             res.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
               ? "এই ইমেইলটি আগে থেকেই ব্যবহার করা হয়েছে"
+              : res.error.code === "INVALID_ORIGIN"
+                ? "সাইটের auth domain ঠিকভাবে configure করা নেই। Vercel-এ BETTER_AUTH_URL production domain দিয়ে সেট করে redeploy করুন।"
               : res.error.code === "USERNAME_IS_ALREADY_TAKEN"
                 ? "নিবন্ধন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।"
                 : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";

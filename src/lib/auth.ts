@@ -15,7 +15,18 @@ const globalForMongo = globalThis as typeof globalThis & {
 };
 
 function createAuth(state: MongoState) {
-  const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+  const vercelHost =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  const baseURL =
+    process.env.BETTER_AUTH_URL ||
+    (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
+  const vercelOrigins = [
+    process.env.VERCEL_URL,
+    process.env.VERCEL_BRANCH_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  ]
+    .filter((host): host is string => Boolean(host))
+    .map((host) => `https://${host}`);
 
   return betterAuth({
     database: mongodbAdapter(
@@ -23,7 +34,7 @@ function createAuth(state: MongoState) {
       { client: state.client },
     ),
     baseURL,
-    trustedOrigins: [baseURL],
+    trustedOrigins: [...new Set([baseURL, ...vercelOrigins])],
     secret: process.env.BETTER_AUTH_SECRET!,
     rateLimit: {
       enabled: true,
