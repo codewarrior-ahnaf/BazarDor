@@ -96,9 +96,6 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                     <p className="text-xs font-semibold text-gray-800 leading-tight">
                       {session.user.name || "ব্যবহারকারী"}
                     </p>
-                    <p className="text-[10px] text-gray-700 truncate max-w-[120px]">
-                      {session.user.email}
-                    </p>
                   </div>
                   <ChevronDown
                     className={`w-4 h-4 text-gray-700 transition-transform ${

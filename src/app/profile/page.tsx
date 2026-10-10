@@ -8,7 +8,6 @@ import { useSession, signOut } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import {
   User as UserIcon,
-  Mail,
   Calendar,
   Edit3,
   LogOut,
@@ -102,10 +101,6 @@ export default function ProfilePage() {
                   সক্রিয় সদস্য
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-gray-500 flex items-center justify-center sm:justify-start gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-gray-400" />
-                {session.user.email}
-              </p>
             </div>
           </div>
 
@@ -117,14 +112,6 @@ export default function ProfilePage() {
                 পূর্ণ নাম
               </span>
               <span className="font-bold text-gray-900">{session.user.name}</span>
-            </div>
-
-            <div className="flex items-center justify-between py-1 border-b border-gray-200/60">
-              <span className="text-gray-500 font-medium flex items-center gap-2">
-                <Mail className="w-4 h-4 text-gray-400" />
-                ইমেইল ঠিকানা
-              </span>
-              <span className="font-bold text-gray-900">{session.user.email}</span>
             </div>
 
             <div className="flex items-center justify-between py-1">
