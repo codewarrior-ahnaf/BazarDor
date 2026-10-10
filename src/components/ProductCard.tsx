@@ -29,7 +29,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Product Name & Unit */}
       <div className="space-y-1 mb-4">
-        <h3 className="break-words font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-base sm:text-lg line-clamp-2">
+        <h3 className="wrap-break-word font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-base sm:text-lg line-clamp-2">
           {toBnNum(product.nameBn)}
         </h3>
         <p className="text-xs text-gray-500 font-medium">
@@ -55,8 +55,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             isUp
               ? "bg-emerald-50 text-emerald-700 border-emerald-200"
               : isDown
-              ? "bg-rose-50 text-rose-700 border-rose-200"
-              : "bg-gray-50 text-gray-600 border-gray-200"
+                ? "bg-rose-50 text-rose-700 border-rose-200"
+                : "bg-gray-50 text-gray-600 border-gray-200"
           }`}
         >
           <span>{isUp ? "▲" : isDown ? "▼" : "—"}</span>
