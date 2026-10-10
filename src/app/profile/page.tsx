@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import toast from "react-hot-toast";
@@ -67,9 +68,12 @@ export default function ProfilePage() {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-700 text-white flex items-center justify-center text-3xl font-extrabold shadow-sm overflow-hidden shrink-0 border-4 border-emerald-50">
               {session.user.image ? (
-                <img
+                <Image
                   src={session.user.image}
                   alt={session.user.name || "User"}
+                  width={96}
+                  height={96}
+                  unoptimized
                   className="w-full h-full object-cover"
                 />
               ) : (

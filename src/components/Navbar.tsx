@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Category, Product } from "@/types";
@@ -21,11 +22,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
   const { data: session, isPending } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [banglaDate, setBanglaDate] = useState("");
-
-  useEffect(() => {
-    setBanglaDate(getBanglaDate());
-  }, []);
+  const [banglaDate] = useState(() => getBanglaDate());
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -83,9 +80,12 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                 >
                   <div className="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shadow-xs overflow-hidden">
                     {session.user.image ? (
-                      <img
+                      <Image
                         src={session.user.image}
                         alt={session.user.name || "User"}
+                        width={32}
+                        height={32}
+                        unoptimized
                         className="w-full h-full object-cover"
                       />
                     ) : (
