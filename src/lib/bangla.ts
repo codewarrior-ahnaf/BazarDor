@@ -105,3 +105,4 @@ export function getBanglaDate(date = new Date()): string {
 
   return `${dayName}, ${day} ${monthName} ${year}`;
 }
+

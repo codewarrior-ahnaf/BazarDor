@@ -55,3 +55,4 @@ CREATE TABLE IF NOT EXISTS verification (
   updatedAt INTEGER NOT NULL
 );
 `);
+
