@@ -1,8 +1,23 @@
 import { betterAuth } from "better-auth";
-import { db } from "./db";
+import { MongoClient } from "mongodb";
+import { mongodbAdapter } from "@better-auth/mongo-adapter";
+
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+  throw new Error("MONGODB_URI is required to start authentication.");
+}
+
+const globalForMongo = globalThis as typeof globalThis & {
+  bazardorMongoClient?: MongoClient;
+};
+const mongoClient =
+  globalForMongo.bazardorMongoClient ?? new MongoClient(mongoUri);
+globalForMongo.bazardorMongoClient = mongoClient;
+
+const mongoDatabase = mongoClient.db(process.env.MONGODB_DATABASE || "bazardor");
 
 export const auth = betterAuth({
-  database: db,
+  database: mongodbAdapter(mongoDatabase, { client: mongoClient }),
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   secret:
     process.env.BETTER_AUTH_SECRET ||

@@ -40,7 +40,7 @@
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **Authentication:** [BetterAuth](https://better-auth.com/) (Email/Password, Google & GitHub Social Login, User Update)
-- **Database:** SQLite (Better-SQLite3)
+- **Database:** MongoDB (Better Auth MongoDB adapter)
 - **Notification / Feedback:** [react-hot-toast](https://react-hot-toast.com/)
 - **Icons:** [Lucide React](https://lucide.dev/)
 
@@ -79,7 +79,11 @@ npm install
 BETTER_AUTH_SECRET=bazardor-super-secret-key-at-least-32-chars-long-2026
 BETTER_AUTH_URL=http://localhost:3000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
+MONGODB_DATABASE=bazardor
 ```
+
+Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `MONGODB_URI` আবশ্যক। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `MONGODB_URI`, `MONGODB_DATABASE`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
 
 ### ৩. ডেভেলপমেন্ট সার্ভার চালু করুন:
 ```bash
@@ -92,13 +96,6 @@ npm run dev
 npm run build
 npm start
 ```
-
----
-
-## 🧪 ডেমো অ্যাকাউন্ট (পরীক্ষার সুবিধার জন্য)
-লগইন পেজে এক ক্লিকেই পূরণ করার জন্য **"ডেমো ক্রেডেনশিয়াল পূরণ করুন"** বাটন রয়েছে:
-- **ইমেইল:** `demo@bazardor.com`
-- **পাসওয়ার্ড:** `bazardor123`
 
 ---
 
