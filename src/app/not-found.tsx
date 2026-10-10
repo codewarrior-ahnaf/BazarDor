@@ -18,7 +18,7 @@ export default function NotFound() {
             পৃষ্ঠাটি খুঁজে পাওয়া যায়নি
           </h1>
           <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-            আপনি যে পৃষ্ঠাটি খুঁজছেন তা স্থানান্তরিত হয়েছে অথবা লিঙ্কটি সঠিক নয়।
+            পণ্য বা ক্যাটাগরিটি পাওয়া যায়নি, অথবা লিঙ্কটি সঠিক নয়।
           </p>
         </div>
 

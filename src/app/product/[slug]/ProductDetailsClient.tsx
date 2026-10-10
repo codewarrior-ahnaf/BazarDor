@@ -1,19 +1,13 @@
-"use client";
-
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useSession } from "@/lib/auth-client";
 import { Product } from "@/types";
 import { formatBnPrice, formatUnit, toBnNum } from "@/lib/bangla";
-import toast from "react-hot-toast";
 import {
   ArrowLeft,
   Store,
   MapPin,
   TrendingUp,
   TrendingDown,
-  ShieldAlert,
 } from "lucide-react";
 
 interface ProductDetailsClientProps {
@@ -23,18 +17,8 @@ interface ProductDetailsClientProps {
 export default function ProductDetailsClient({
   product,
 }: ProductDetailsClientProps) {
-  const router = useRouter();
-  const { data: session, isPending } = useSession();
-
-  useEffect(() => {
-    if (!isPending && !session?.user) {
-      toast.error("পণ্যটির বিস্তারিত তথ্য দেখতে অনুগ্রহ করে লগইন করুন");
-      router.replace(`/signin?redirect=/product/${product.slug}`);
-    }
-  }, [session, isPending, router, product.slug]);
-
   // Compute market-based statistics
-  const stats = useMemo(() => {
+  const stats = (() => {
     if (!product.markets || product.markets.length === 0) {
       return {
         minPrice: product.today,
@@ -60,53 +44,7 @@ export default function ProductDetailsClient({
       maxPrice: max === -Infinity ? product.today : max,
       avgPrice: count > 0 ? Math.round(sum / count) : product.today,
     };
-  }, [product]);
-
-  // If loading session, show loading skeleton
-  if (isPending) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-8 animate-pulse">
-        <div className="h-6 w-36 bg-gray-200 rounded" />
-        <div className="bg-white rounded-3xl p-8 border border-gray-200 space-y-4">
-          <div className="w-16 h-16 bg-gray-200 rounded-2xl" />
-          <div className="h-8 w-64 bg-gray-200 rounded" />
-          <div className="h-4 w-96 bg-gray-100 rounded" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="h-32 bg-white rounded-2xl border border-gray-200" />
-          <div className="h-32 bg-white rounded-2xl border border-gray-200" />
-          <div className="h-32 bg-white rounded-2xl border border-gray-200" />
-        </div>
-      </div>
-    );
-  }
-
-  // If not logged in, show redirected prompt
-  if (!session?.user) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-20 text-center">
-        <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-4">
-          <div className="w-16 h-16 rounded-full bg-amber-50 text-amber-600 mx-auto flex items-center justify-center">
-            <ShieldAlert className="w-8 h-8" />
-          </div>
-          <h2 className="text-xl font-bold text-gray-900">
-            লগইন প্রয়োজন
-          </h2>
-          <p className="text-sm text-gray-500">
-            এই পণ্যের বিস্তারিত বাজার বিশ্লেষণ দেখতে লগইন পেজে রিডাইরেক্ট করা হচ্ছে...
-          </p>
-          <div className="pt-2">
-            <Link
-              href={`/signin?redirect=/product/${product.slug}`}
-              className="inline-flex items-center justify-center w-full px-5 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-sm transition-colors"
-            >
-              এখনই সাইন ইন করুন
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  })();
 
   const isUp = product.change?.dir === "up";
   const isDown = product.change?.dir === "down";
