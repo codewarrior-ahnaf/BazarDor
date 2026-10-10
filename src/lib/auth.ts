@@ -7,18 +7,18 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET || "bazardor-super-secret-key-at-least-32-chars-long-2026",
   emailAndPassword: {
     enabled: true,
+    minPasswordLength: 8,
+    maxPasswordLength: 128,
     requireEmailVerification: false,
     autoSignIn: true,
   },
   socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "demo-google-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "demo-google-client-secret",
-    },
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID || "demo-github-client-id",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "demo-github-client-secret",
-    },
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? { google: { clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET } }
+      : {}),
+    ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+      ? { github: { clientId: process.env.GITHUB_CLIENT_ID, clientSecret: process.env.GITHUB_CLIENT_SECRET } }
+      : {}),
   },
   user: {
     changeEmail: {
