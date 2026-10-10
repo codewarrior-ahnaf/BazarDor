@@ -15,11 +15,14 @@ const globalForMongo = globalThis as typeof globalThis & {
 };
 
 function createAuth(state: MongoState) {
+  const isDevelopment = process.env.NODE_ENV === "development";
   const vercelHost =
     process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
   const baseURL =
-    process.env.BETTER_AUTH_URL ||
-    (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
+    isDevelopment
+      ? "http://localhost:3000"
+      : process.env.BETTER_AUTH_URL ||
+        (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
   const vercelOrigins = [
     process.env.VERCEL_URL,
     process.env.VERCEL_BRANCH_URL,
@@ -34,7 +37,15 @@ function createAuth(state: MongoState) {
       { client: state.client },
     ),
     baseURL,
-    trustedOrigins: [...new Set([baseURL, ...vercelOrigins])],
+    trustedOrigins: [
+      ...new Set([
+        baseURL,
+        ...(isDevelopment
+          ? ["http://localhost:3000", "http://127.0.0.1:3000"]
+          : []),
+        ...vercelOrigins,
+      ]),
+    ],
     secret: process.env.BETTER_AUTH_SECRET!,
     rateLimit: {
       enabled: true,
@@ -93,7 +104,13 @@ function initializeAuth() {
   const state =
     globalForMongo.bazardorMongo?.uri === mongoUri
       ? globalForMongo.bazardorMongo
-      : { uri: mongoUri, client: new MongoClient(mongoUri) };
+      : {
+          uri: mongoUri,
+          client: new MongoClient(mongoUri, {
+            serverSelectionTimeoutMS: 10_000,
+            connectTimeoutMS: 10_000,
+          }),
+        };
   globalForMongo.bazardorMongo = state;
   mongoState = state;
 

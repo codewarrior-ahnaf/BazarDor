@@ -81,6 +81,10 @@ BETTER_AUTH_DB_URL=mongodb+srv://<username>:<password>@<cluster>/?retryWrites=tr
 
 Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `BETTER_AUTH_DB_URL` আবশ্যক। Database নাম আলাদা করে না দিলে অ্যাপ `bazardor` database ব্যবহার করে। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `BETTER_AUTH_DB_URL`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
 
+Local development-এ auth callback `http://localhost:3000` ব্যবহার করে, `.env`-এ production `BETTER_AUTH_URL` থাকলেও। Google OAuth local-এ পরীক্ষা করতে Google Cloud Console-এর Authorized redirect URIs-এ `http://localhost:3000/api/auth/callback/google` যোগ করো। Production-এর জন্য আলাদাভাবে deployed domain-এর `https://<your-domain>/api/auth/callback/google` যোগ করতে হবে।
+
+Vercel-এ auth request timeout বা `500` হলে MongoDB Atlas-এর Network Access-এ Vercel runtime থেকে database-এ পৌঁছানোর অনুমতি আছে কি না যাচাই করো। সম্ভব হলে স্থির egress IP/private networking ব্যবহার করো; তা না থাকলে `0.0.0.0/0` allow করার আগে database user-কে শুধু প্রয়োজনীয় database-এ সীমাবদ্ধ করে শক্তিশালী password ব্যবহার করো। Vercel-এর `BETTER_AUTH_DB_URL`-এ Atlas URI-টি সঠিক database credentials-সহ সেট করে redeploy করো।
+
 নিবন্ধনের সময় পুরো নাম থেকে স্বয়ংক্রিয়ভাবে username তৈরি হয়; আলাদা username field নেই এবং একই নাম একাধিক account-এ ব্যবহার করা যায়। Username-এ collision এড়াতে random suffix যোগ হয়। শুধু আগে থেকে ব্যবহৃত email-এ toast দেখানো হয়। আগে থেকে থাকা account-এ username না থাকলে MongoDB-তে প্রথম auth connection-এ `user_<id>` username স্বয়ংক্রিয়ভাবে বসে; email/password login অপরিবর্তিত থাকে। একাধিক ব্যবহারকারী একই পাসওয়ার্ড ব্যবহার করতে পারেন—Better Auth প্রতিটি অ্যাকাউন্টের পাসওয়ার্ড আলাদাভাবে hash করে। Auth API-তে rate limiting চালু আছে।
 
 ### ৩. ডেভেলপমেন্ট সার্ভার চালু করুন:

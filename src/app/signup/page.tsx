@@ -82,6 +82,8 @@ export default function SignUpPage() {
               ? "এই ইমেইলটি আগে থেকেই ব্যবহার করা হয়েছে"
               : res.error.code === "INVALID_ORIGIN"
                 ? "সাইটের auth domain ঠিকভাবে configure করা নেই। Vercel-এ BETTER_AUTH_URL production domain দিয়ে সেট করে redeploy করুন।"
+                : res.error.status >= 500
+                  ? "সার্ভার MongoDB-তে পৌঁছাতে পারছে না। MongoDB Atlas Network Access এবং Vercel-এর BETTER_AUTH_DB_URL পরীক্ষা করুন।"
               : res.error.code === "USERNAME_IS_ALREADY_TAKEN"
                 ? "নিবন্ধন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।"
                 : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";
@@ -95,7 +97,7 @@ export default function SignUpPage() {
         return;
       }
     } catch {
-      const msg = "নিবন্ধন সম্পন্ন করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
+      const msg = "সার্ভারের সাথে সংযোগ করা যায়নি। MongoDB Atlas ও Vercel-এর auth configuration পরীক্ষা করুন।";
       setErrorMessage(msg);
       toast.error(msg);
     } finally {
