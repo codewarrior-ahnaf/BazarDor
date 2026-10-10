@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="380" viewBox="0 0 560 380" fill="none">
+  <defs>
+    <linearGradient id="basket" x1="182" y1="180" x2="367" y2="332" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8A55C"/><stop offset="1" stop-color="#A96D2D"/>
+    </linearGradient>
+    <linearGradient id="basketLight" x1="205" y1="195" x2="350" y2="238" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6D293"/><stop offset="1" stop-color="#D99B4B"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="155" y1="52" x2="252" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5DBA79"/><stop offset="1" stop-color="#16865B"/>
+    </linearGradient>
+    <linearGradient id="tomato" x1="353" y1="67" x2="424" y2="143" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF8065"/><stop offset="1" stop-color="#E34E3D"/>
+    </linearGradient>
+    <filter id="shadow" x="128" y="128" width="313" height="244" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+  <circle cx="280" cy="190" r="164" fill="#E8F8EF"/>
+  <circle cx="280" cy="190" r="130" fill="#F5FCF7"/>
+  <path d="M80 302c58 27 127 41 200 41s142-14 200-41" stroke="#C8EBD6" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="283" cy="337" rx="143" ry="17" fill="#14532D" fill-opacity=".12" filter="url(#shadow)"/>
+
+  <!-- leafy greens -->
+  <path d="M202 186c-37-29-42-77-8-112 31 14 50 51 34 87 7-40 34-67 73-69 14 38-4 77-44 95" fill="url(#leaf)"/>
+  <path d="M205 170c5-28-2-51-20-72m21 70c16-26 37-42 63-48m-65 43c-10-20-25-32-43-37" stroke="#D8F3DF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M331 180c-27-28-26-68 4-91 26 13 37 43 25 69 12-31 38-46 66-39 6 31-12 58-43 66" fill="#70C783"/>
+  <path d="M342 167c7-22 6-41-3-59m4 58c14-20 33-31 54-33" stroke="#E4F7E8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- tomato -->
+  <path d="M390 68c-9-14-2-24 7-30 9 10 10 18 4 28 10-10 22-10 32-1-4 10-15 15-28 10 24 0 41 17 39 39-2 25-22 40-45 35-24-5-36-27-27-49 5-13 14-23 27-32-4 1-7 1-9 0Z" fill="url(#tomato)"/>
+  <path d="M400 62c1 10 7 16 15 20m-15-20c-7 9-17 11-26 9m41 11c9-8 19-8 27-4" stroke="#277B4A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M393 104c-4 10-2 20 4 26" stroke="#FFB09B" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- carrot -->
+  <path d="M124 217c-4-7-1-16 7-19l76-31-35 75c-4 8-14 11-21 6l-27-31Z" fill="#F28A43"/>
+  <path d="M196 171c1-12 9-20 20-21-1 11-6 18-16 22 10-7 20-6 27 2-7 8-17 10-28 3" fill="#53A86D"/>
+  <path d="m147 214 16 9m-4-23 14 8" stroke="#FFD19C" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- basket handle -->
+  <path d="M194 228c6-66 35-100 88-100s82 34 88 100" stroke="#BC8240" stroke-width="16" stroke-linecap="round"/>
+  <path d="M208 226c7-52 29-78 74-78s67 26 74 78" stroke="#F3C77F" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- basket body -->
+  <path d="M170 218h224l-21 103c-3 13-14 22-28 22H219c-14 0-25-9-28-22l-21-103Z" fill="url(#basket)"/>
+  <path d="M170 220h224l-5 25H175l-5-25Z" fill="url(#basketLight)"/>
+  <path d="M179 260h206m-198 30h190m-181 29h173" stroke="#F6D293" stroke-width="13" stroke-linecap="round"/>
+  <path d="m219 249 9 79m46-79v84m46-84-9 79" stroke="#B57937" stroke-width="9" stroke-linecap="round"/>
+  <path d="M166 218c0-11 9-20 20-20h192c11 0 20 9 20 20s-9 20-20 20H186c-11 0-20-9-20-20Z" fill="#EAB96E" stroke="#A96D2D" stroke-width="5"/>
+  <ellipse cx="282" cy="218" rx="91" ry="13" fill="#8D5A2B"/>
+  <ellipse cx="282" cy="216" rx="80" ry="8" fill="#C78C4A"/>
+
+  <!-- small highlights -->
+  <circle cx="115" cy="139" r="5" fill="#8BD2A0"/>
+  <circle cx="448" cy="192" r="6" fill="#8BD2A0"/>
+  <path d="m446 262 5 10 10 5-10 5-5 10-5-10-10-5 10-5 5-10Z" fill="#D5EEDC"/>
+</svg>

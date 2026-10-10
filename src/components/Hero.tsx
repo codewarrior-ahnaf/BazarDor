@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown } from "lucide-react";
 
@@ -37,32 +38,21 @@ export default function Hero() {
 
           {/* Right Banner / Hero Illustration */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md p-6 sm:p-8 bg-gradient-to-br from-emerald-100/50 via-emerald-50/30 to-amber-50/40 rounded-3xl border border-emerald-100 shadow-sm flex flex-col items-center justify-center text-center">
-              {/* Decorative Basket & Fresh Produce */}
-              <div className="relative w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center">
-                <div className="absolute inset-0 bg-emerald-400/10 rounded-full blur-2xl" />
-                <div className="relative text-7xl sm:text-8xl select-none filter drop-shadow-md">
-                  🧺
-                </div>
-                {/* Floating Produce icons */}
-                <span className="absolute -top-2 left-6 text-3xl sm:text-4xl animate-pulse">
-                  🥦
-                </span>
-                <span className="absolute top-2 right-4 text-3xl sm:text-4xl animate-bounce delay-150">
-                  🍎
-                </span>
-                <span className="absolute bottom-4 -left-2 text-3xl sm:text-4xl animate-pulse delay-300">
-                  🥕
-                </span>
-                <span className="absolute -bottom-2 right-6 text-3xl sm:text-4xl animate-bounce delay-75">
-                  🌽
-                </span>
-              </div>
+            <div className="relative flex w-full max-w-md flex-col items-center justify-center overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-amber-50/50 p-4 text-center shadow-sm sm:p-6">
+              <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-emerald-100/60 blur-3xl" />
+              <Image
+                src="/bazar-illustration.svg"
+                alt="তাজা শাকসবজিতে ভরা বাজারের ঝুড়ি"
+                width={560}
+                height={380}
+                priority
+                className="relative h-auto w-full max-w-[420px]"
+              />
 
-              <div className="mt-4 px-4 py-2 bg-white/90 backdrop-blur-xs rounded-xl border border-emerald-100 shadow-xs">
+              <div className="relative -mt-1 rounded-xl border border-emerald-100 bg-white/90 px-4 py-2 shadow-xs backdrop-blur-xs sm:-mt-2">
                 <p className="text-xs sm:text-sm font-semibold text-emerald-800 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                  আজকের তাজা বাজারদর সরাসরি আপডেট
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  নিত্যপণ্যের বাজারদর এক নজরে
                 </p>
               </div>
             </div>
