@@ -19,7 +19,7 @@ interface NavbarProps {
 export default function Navbar({ categories, tickerProducts = [] }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session, isPending } = useSession();
+  const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [banglaDate] = useState(() => getBanglaDate());
@@ -69,9 +69,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
 
           {/* Right Side: Auth buttons or User Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {isPending ? (
-              <div className="h-9 w-20 bg-gray-100 animate-pulse rounded-lg" />
-            ) : session?.user ? (
+            {session?.user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"

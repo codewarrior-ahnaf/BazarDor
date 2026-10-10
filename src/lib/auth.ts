@@ -7,21 +7,44 @@ if (!mongoUri) {
   throw new Error("MONGODB_URI is required to start authentication.");
 }
 
+const authSecret = process.env.BETTER_AUTH_SECRET;
+if (!authSecret || authSecret.length < 32) {
+  throw new Error("BETTER_AUTH_SECRET must contain at least 32 characters.");
+}
+
 const globalForMongo = globalThis as typeof globalThis & {
-  bazardorMongoClient?: MongoClient;
+  bazardorMongo?: {
+    uri: string;
+    client: MongoClient;
+    connection?: Promise<MongoClient>;
+  };
 };
-const mongoClient =
-  globalForMongo.bazardorMongoClient ?? new MongoClient(mongoUri);
-globalForMongo.bazardorMongoClient = mongoClient;
+const mongoState =
+  globalForMongo.bazardorMongo?.uri === mongoUri
+    ? globalForMongo.bazardorMongo
+    : {
+        uri: mongoUri,
+        client: new MongoClient(mongoUri),
+      };
+globalForMongo.bazardorMongo = mongoState;
+const mongoClient = mongoState.client;
+
+export async function connectMongo(): Promise<MongoClient> {
+  if (!mongoState.connection) {
+    const connection = mongoClient.connect().finally(() => {
+      if (mongoState.connection === connection) mongoState.connection = undefined;
+    });
+    mongoState.connection = connection;
+  }
+  return mongoState.connection;
+}
 
 const mongoDatabase = mongoClient.db(process.env.MONGODB_DATABASE || "bazardor");
 
 export const auth = betterAuth({
   database: mongodbAdapter(mongoDatabase, { client: mongoClient }),
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
-  secret:
-    process.env.BETTER_AUTH_SECRET ||
-    "bazardor-super-secret-key-at-least-32-chars-long-2026",
+  secret: authSecret,
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

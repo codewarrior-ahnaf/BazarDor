@@ -49,8 +49,6 @@
 ## 📡 এপিআই অ্যান্ডপয়েন্টসমূহ (API Endpoints)
 
 - **Main API:** `https://openapi.programming-hero.com/api/bazardor`
-- **Fallback 1:** `https://api.api-store.workers.dev/api/bazardor`
-- **Fallback 2:** `https://api.abcz.workers.dev/api/bazardor`
 
 | মেথড | অ্যান্ডপয়েন্ট | বিবরণ |
 |------|-------------|-------|
@@ -60,7 +58,7 @@
 | `GET` | `/products?category=:slug` | নির্দিষ্ট ক্যাটাগরির পণ্য ফিল্টার |
 | `GET` | `/products/:id` | নির্দিষ্ট একটি পণ্যের বিশদ বাজারদর |
 
-> *প্রতিটি request প্রথমে Main API-তে যায়। সেটি ব্যর্থ হলে ক্রমানুসারে Fallback 1 ও Fallback 2 চেষ্টা করা হয়। তিনটি API-ই ব্যর্থ হলে friendly error state দেখানো হয়; local JSON data ব্যবহার করা হয় না।*
+> *সব product ও category data Main API থেকে নেওয়া হয়। API অনুপলব্ধ হলে friendly error state দেখানো হয়; local JSON বা বিকল্প API ব্যবহার করা হয় না।*
 
 ---
 
@@ -78,7 +76,6 @@ npm install
 ```env
 BETTER_AUTH_SECRET=bazardor-super-secret-key-at-least-32-chars-long-2026
 BETTER_AUTH_URL=http://localhost:3000
-NEXT_PUBLIC_APP_URL=http://localhost:3000
 MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
 MONGODB_DATABASE=bazardor
 ```
