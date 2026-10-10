@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import ScrollProgress from "@/components/ScrollProgress";
+import DragGuard from "@/components/DragGuard";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({
           }}
         />
         <ScrollProgress />
+        <DragGuard />
         {children}
       </body>
     </html>

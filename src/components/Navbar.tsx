@@ -93,7 +93,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                     )}
                   </div>
                   <div className="hidden sm:block">
-                    <p className="text-xs font-semibold text-gray-800 leading-tight">
+                    <p className="max-w-32 truncate text-xs font-semibold leading-tight text-gray-800 sm:max-w-36">
                       {session.user.name || "ব্যবহারকারী"}
                     </p>
                   </div>
@@ -106,7 +106,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw_-_1.5rem)] rounded-2xl border border-gray-100 bg-white py-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="px-4 py-2.5 border-b border-gray-100">
                       <p className="text-xs text-gray-700">লগইন করা আছে</p>
                       <p className="text-sm font-semibold text-gray-800 truncate">

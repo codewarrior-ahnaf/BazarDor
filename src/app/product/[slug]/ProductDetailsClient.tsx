@@ -138,11 +138,11 @@ export default function ProductDetailsClient({
       {/* Top — Summary Card */}
       <div className="bg-white rounded-3xl border border-gray-200/90 p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-start gap-4 sm:gap-5">
+          <div className="flex min-w-0 items-start gap-3 sm:gap-5">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-3xl sm:text-4xl shadow-xs shrink-0">
               {product.image || product.categoryIcon || "🛒"}
             </div>
-            <div className="space-y-1.5">
+            <div className="min-w-0 space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                   {product.categoryNameBn}
@@ -151,7 +151,7 @@ export default function ProductDetailsClient({
                   {formatUnit(product.unit)}
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight">
+              <h1 className="break-words text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
                 {product.nameBn}
               </h1>
               <p className="text-xs sm:text-sm text-gray-500 max-w-xl">
@@ -266,8 +266,11 @@ export default function ProductDetailsClient({
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs sm:text-sm">
+        <p className="px-4 pt-3 text-[11px] text-gray-500 sm:hidden">
+          বাজারের সব তথ্য দেখতে টেবিলটি আড়াআড়ি স্ক্রল করুন
+        </p>
+        <div className="overflow-x-auto overscroll-x-contain">
+          <table className="w-full min-w-[620px] border-collapse text-left text-xs sm:text-sm">
             <thead>
               <tr className="bg-gray-50/80 border-b border-gray-200 text-gray-600 font-semibold">
                 <th className="py-3.5 px-4 sm:px-6">মার্কেট</th>
@@ -286,9 +289,11 @@ export default function ProductDetailsClient({
                       key={`${m.market}-${idx}`}
                       className="hover:bg-emerald-50/30 transition-colors"
                     >
-                      <td className="py-3.5 px-4 sm:px-6 font-semibold text-gray-900 flex items-center gap-2">
-                        <Store className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span>{m.market}</span>
+                      <td className="py-3.5 px-4 sm:px-6 font-semibold text-gray-900">
+                        <span className="inline-flex items-center gap-2">
+                          <Store className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>{m.market}</span>
+                        </span>
                       </td>
                       <td className="py-3.5 px-4 sm:px-6 text-gray-600">
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 text-xs font-medium">

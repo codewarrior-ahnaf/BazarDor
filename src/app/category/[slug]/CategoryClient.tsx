@@ -33,11 +33,11 @@ export default function CategoryClient({
     <div className="space-y-8">
       {/* Category Header & Sort Controls */}
       <div className="bg-white rounded-3xl border border-gray-200/80 p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-3xl sm:text-4xl shadow-xs">
             {category.icon}
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <Link
                 href="/"
@@ -51,9 +51,9 @@ export default function CategoryClient({
                 {category.nameBn}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
+            <h1 className="flex flex-wrap items-center gap-2 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
               <span>{category.nameBn}</span>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">
                 {sortedProducts.length}টি পণ্য
               </span>
             </h1>
@@ -64,7 +64,7 @@ export default function CategoryClient({
         </div>
 
         {/* Challenge C1: Sort dropdown with Chevron icon */}
-        <div className="flex items-center gap-2.5 bg-gray-50/80 px-4 py-2 rounded-2xl border border-gray-200 self-start sm:self-auto">
+        <div className="flex max-w-full flex-wrap items-center gap-2.5 rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-2 self-stretch sm:self-auto">
           <ArrowUpDown className="w-4 h-4 text-gray-500" />
           <label
             htmlFor="sort-select"
@@ -72,12 +72,12 @@ export default function CategoryClient({
           >
             সাজান:
           </label>
-          <div className="relative">
+          <div className="relative min-w-0 flex-1 sm:flex-none">
             <select
               id="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none bg-white text-gray-800 font-medium text-xs sm:text-sm py-1.5 pl-3 pr-8 rounded-xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 cursor-pointer shadow-xs"
+              className="w-full max-w-full appearance-none rounded-xl border border-gray-200 bg-white py-1.5 pl-3 pr-8 text-xs font-medium text-gray-800 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-emerald-500 sm:w-auto sm:text-sm"
             >
               <option value="default">ডিফল্ট</option>
               <option value="price-asc">দাম: কম থেকে বেশি</option>

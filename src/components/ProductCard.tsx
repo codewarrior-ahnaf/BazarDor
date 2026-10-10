@@ -15,21 +15,21 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group block bg-white rounded-2xl border border-gray-200/80 hover:border-emerald-500/80 p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 transform hover:-translate-y-1"
+      className="group block min-w-0 bg-white rounded-2xl border border-gray-200/80 p-4 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-emerald-500/80 hover:shadow-md sm:p-5"
     >
       {/* Top Header: Emoji + Category Tag */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="w-12 h-12 rounded-xl bg-emerald-50/80 border border-emerald-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
           {product.image || product.categoryIcon || "🛒"}
         </div>
-        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-50 text-gray-500 border border-gray-100">
+        <span className="inline-flex max-w-[55%] truncate items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-50 text-gray-500 border border-gray-100">
           {product.categoryNameBn || "পণ্য"}
         </span>
       </div>
 
       {/* Product Name & Unit */}
       <div className="space-y-1 mb-4">
-        <h3 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-base sm:text-lg line-clamp-1">
+        <h3 className="break-words font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-base sm:text-lg line-clamp-2">
           {product.nameBn}
         </h3>
         <p className="text-xs text-gray-500 font-medium">
