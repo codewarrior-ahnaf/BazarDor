@@ -5,7 +5,10 @@ import { ArrowDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section id="hero-section" className="relative overflow-hidden bg-gradient-to-b from-emerald-50/70 via-white to-transparent py-10 sm:py-16 border-b border-emerald-100/60">
+    <section
+      id="hero-section"
+      className="relative overflow-hidden bg-linear-to-b from-emerald-50/70 via-white to-transparent py-10 sm:py-16 border-b border-emerald-100/60"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Text Content */}
@@ -21,8 +24,8 @@ export default function Hero() {
             </h1>
 
             <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-xl leading-relaxed">
-              সঠিক সিদ্ধান্ত নিতে প্রতিদিনের নির্ভরযোগ্য বাজার মূল্যের আপডেট পান।
-              বিভিন্ন পাইকারি ও খুচরা বাজারের দাম তুলনা করুন এক নিমিষেই।
+              সঠিক সিদ্ধান্ত নিতে প্রতিদিনের নির্ভরযোগ্য বাজার মূল্যের আপডেট
+              পান। বিভিন্ন পাইকারি ও খুচরা বাজারের দাম তুলনা করুন এক নিমিষেই।
             </p>
 
             <div className="pt-2 sm:pt-4">
@@ -38,7 +41,7 @@ export default function Hero() {
 
           {/* Right Banner / Hero Illustration */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="relative flex w-full max-w-md flex-col items-center justify-center overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-amber-50/50 p-4 text-center shadow-sm sm:p-6">
+            <div className="relative flex w-full max-w-md flex-col items-center justify-center overflow-hidden rounded-3xl border border-emerald-100 bg-linear-to-br from-emerald-50 via-white to-amber-50/50 p-4 text-center shadow-sm sm:p-6">
               <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-emerald-100/60 blur-3xl" />
               <Image
                 src="/bazar-illustration.svg"
@@ -46,7 +49,7 @@ export default function Hero() {
                 width={560}
                 height={380}
                 priority
-                className="relative h-auto w-full max-w-[420px]"
+                className="relative h-auto w-full max-w-105"
               />
 
               <div className="relative -mt-1 rounded-xl border border-emerald-100 bg-white/90 px-4 py-2 shadow-xs backdrop-blur-xs sm:-mt-2">
