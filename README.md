@@ -76,11 +76,10 @@ npm install
 ```env
 BETTER_AUTH_SECRET=bazardor-super-secret-key-at-least-32-chars-long-2026
 BETTER_AUTH_URL=http://localhost:3000
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
-MONGODB_DATABASE=bazardor
+BETTER_AUTH_DB_URL=mongodb+srv://<username>:<password>@<cluster>/?retryWrites=true&w=majority
 ```
 
-Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `MONGODB_URI` আবশ্যক। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `MONGODB_URI`, `MONGODB_DATABASE`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
+Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `BETTER_AUTH_DB_URL` আবশ্যক। Database নাম আলাদা করে না দিলে অ্যাপ `bazardor` database ব্যবহার করে। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `BETTER_AUTH_DB_URL`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
 
 ### ৩. ডেভেলপমেন্ট সার্ভার চালু করুন:
 ```bash

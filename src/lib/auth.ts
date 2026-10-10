@@ -2,9 +2,9 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-const mongoUri = process.env.MONGODB_URI;
+const mongoUri = process.env.BETTER_AUTH_DB_URL;
 if (!mongoUri) {
-  throw new Error("MONGODB_URI is required to start authentication.");
+  throw new Error("BETTER_AUTH_DB_URL is required to start authentication.");
 }
 
 const authSecret = process.env.BETTER_AUTH_SECRET;
