@@ -127,11 +127,11 @@ export default function ProductDetailsClient({
           href={`/category/${product.category}`}
           className="hover:text-emerald-700 transition-colors font-medium"
         >
-          {product.categoryNameBn}
+          {toBnNum(product.categoryNameBn)}
         </Link>
         <span className="text-gray-300">/</span>
         <span className="text-gray-900 font-semibold truncate">
-          {product.nameBn}
+          {toBnNum(product.nameBn)}
         </span>
       </nav>
 
@@ -145,14 +145,14 @@ export default function ProductDetailsClient({
             <div className="min-w-0 space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                  {product.categoryNameBn}
+                  {toBnNum(product.categoryNameBn)}
                 </span>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600">
-                  {formatUnit(product.unit)}
+                  {toBnNum(formatUnit(product.unit))}
                 </span>
               </div>
               <h1 className="break-words text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
-                {product.nameBn}
+                {toBnNum(product.nameBn)}
               </h1>
               <p className="text-xs sm:text-sm text-gray-500 max-w-xl">
                 আজকের সামগ্রিক বাজার বিশ্লেষণ, দেশের প্রধান বাজারসমূহের সর্বনিম্ন
@@ -202,7 +202,7 @@ export default function ProductDetailsClient({
               <span className="text-xs font-bold text-gray-500">টাকা</span>
             </div>
             <span className="text-[11px] text-gray-400 mt-1 block">
-              {formatUnit(product.unit)}
+                {toBnNum(formatUnit(product.unit))}
             </span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
@@ -221,7 +221,7 @@ export default function ProductDetailsClient({
               <span className="text-xs font-bold text-gray-500">টাকা</span>
             </div>
             <span className="text-[11px] text-gray-400 mt-1 block">
-              {formatUnit(product.unit)}
+              {toBnNum(formatUnit(product.unit))}
             </span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
@@ -240,7 +240,7 @@ export default function ProductDetailsClient({
               <span className="text-xs font-bold text-gray-500">টাকা</span>
             </div>
             <span className="text-[11px] text-gray-400 mt-1 block">
-              {formatUnit(product.unit)}
+              {toBnNum(formatUnit(product.unit))}
             </span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
@@ -262,7 +262,9 @@ export default function ProductDetailsClient({
             </p>
           </div>
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-700 self-start sm:self-auto">
-            {product.markets?.length || 0}টি বাজার অন্তর্ভুক্ত
+              {new Intl.NumberFormat("bn-BD", { useGrouping: false }).format(
+                product.markets?.length || 0
+              )}টি বাজার অন্তর্ভুক্ত
           </span>
         </div>
 
@@ -292,13 +294,13 @@ export default function ProductDetailsClient({
                       <td className="py-3.5 px-4 sm:px-6 font-semibold text-gray-900">
                         <span className="inline-flex items-center gap-2">
                           <Store className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>{m.market}</span>
+                          <span>{toBnNum(m.market)}</span>
                         </span>
                       </td>
                       <td className="py-3.5 px-4 sm:px-6 text-gray-600">
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 text-xs font-medium">
                           <MapPin className="w-3 h-3 text-gray-400" />
-                          {m.division}
+                          {toBnNum(m.division)}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 sm:px-6 text-right font-medium text-emerald-700">

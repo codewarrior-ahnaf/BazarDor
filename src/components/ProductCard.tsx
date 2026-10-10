@@ -23,17 +23,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.image || product.categoryIcon || "🛒"}
         </div>
         <span className="inline-flex max-w-[55%] truncate items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-50 text-gray-500 border border-gray-100">
-          {product.categoryNameBn || "পণ্য"}
+          {toBnNum(product.categoryNameBn || "পণ্য")}
         </span>
       </div>
 
       {/* Product Name & Unit */}
       <div className="space-y-1 mb-4">
         <h3 className="break-words font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-base sm:text-lg line-clamp-2">
-          {product.nameBn}
+          {toBnNum(product.nameBn)}
         </h3>
         <p className="text-xs text-gray-500 font-medium">
-          {formatUnit(product.unit)}
+          {toBnNum(formatUnit(product.unit))}
         </p>
       </div>
 

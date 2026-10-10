@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import IncrementalProductGrid from "@/components/IncrementalProductGrid";
 import { getCategories, getProducts } from "@/lib/api";
+import { toBnNum } from "@/lib/bangla";
 import { TrendingUp, TrendingDown, LayoutGrid } from "lucide-react";
 
 export default async function HomePage() {
@@ -108,7 +109,7 @@ export default async function HomePage() {
                 </div>
               </div>
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 self-start sm:self-auto">
-                মোট {products.length}টি পণ্য
+                মোট {toBnNum(products.length)}টি পণ্য
               </span>
             </div>
 

@@ -30,10 +30,10 @@ export default function PriceTicker({ products }: PriceTickerProps) {
             >
               <span className="text-base">{item.image || item.categoryIcon}</span>
               <span className="font-medium text-gray-800 group-hover:text-emerald-700">
-                {item.nameBn}
+                {toBnNum(item.nameBn)}
               </span>
               <span className="text-gray-600 font-semibold">
-                {formatBnPrice(item.today)} টাকা/{formatUnitShort(item.unit)}
+                {formatBnPrice(item.today)} টাকা/{toBnNum(formatUnitShort(item.unit))}
               </span>
               <span
                 className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-medium ${

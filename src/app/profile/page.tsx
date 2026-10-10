@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import { toBnNum } from "@/lib/bangla";
 import {
   User as UserIcon,
   Calendar,
@@ -94,7 +95,7 @@ export default function ProfilePage() {
             <div className="space-y-1.5 flex-1">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                  {session.user.name}
+                  {toBnNum(session.user.name)}
                 </h1>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                   <ShieldCheck className="w-3 h-3" />
@@ -111,7 +112,7 @@ export default function ProfilePage() {
                 <UserIcon className="w-4 h-4 text-gray-400" />
                 পূর্ণ নাম
               </span>
-              <span className="font-bold text-gray-900">{session.user.name}</span>
+              <span className="font-bold text-gray-900">{toBnNum(session.user.name)}</span>
             </div>
 
             <div className="flex items-center justify-between py-1">

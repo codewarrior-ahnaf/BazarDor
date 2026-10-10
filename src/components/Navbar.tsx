@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Category, Product } from "@/types";
-import { getBanglaDate } from "@/lib/bangla";
+import { getBanglaDate, toBnNum } from "@/lib/bangla";
 import PriceTicker from "./PriceTicker";
 import toast from "react-hot-toast";
 import { User, LogOut, Edit3, ChevronDown } from "lucide-react";
@@ -94,7 +94,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                   </div>
                   <div className="hidden sm:block">
                     <p className="max-w-32 truncate text-xs font-semibold leading-tight text-gray-800 sm:max-w-36">
-                      {session.user.name || "ব্যবহারকারী"}
+                        {toBnNum(session.user.name || "ব্যবহারকারী")}
                     </p>
                   </div>
                   <ChevronDown
@@ -110,7 +110,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                     <div className="px-4 py-2.5 border-b border-gray-100">
                       <p className="text-xs text-gray-700">লগইন করা আছে</p>
                       <p className="text-sm font-semibold text-gray-800 truncate">
-                        {session.user.name}
+                        {toBnNum(session.user.name)}
                       </p>
                       <p className="text-xs text-gray-700 truncate">
                         {session.user.email}
@@ -194,7 +194,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                   }`}
                 >
                   <span>{cat.icon}</span>
-                  <span>{cat.nameBn}</span>
+                  <span>{toBnNum(cat.nameBn)}</span>
                 </Link>
               );
             })}

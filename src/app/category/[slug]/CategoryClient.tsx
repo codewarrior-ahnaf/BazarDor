@@ -4,6 +4,7 @@ import React, { useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import { Category, Product, SortOption } from "@/types";
 import IncrementalProductGrid from "@/components/IncrementalProductGrid";
+import { toBnNum } from "@/lib/bangla";
 import { ArrowLeft, ArrowUpDown, ChevronDown, ShoppingBag } from "lucide-react";
 
 interface CategoryClientProps {
@@ -55,17 +56,17 @@ export default function CategoryClient({
               </Link>
               <span className="text-gray-300">/</span>
               <span className="text-xs font-medium text-emerald-800">
-                {category.nameBn}
+                {toBnNum(category.nameBn)}
               </span>
             </div>
             <h1 className="flex flex-wrap items-center gap-2 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              <span>{category.nameBn}</span>
+              <span>{toBnNum(category.nameBn)}</span>
               <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">
-                {sortedProducts.length}টি পণ্য
+                {toBnNum(sortedProducts.length)}টি পণ্য
               </span>
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">
-              {category.nameBn} ক্যাটাগরির আজকের বাজার মূল্য এবং পরিবর্তন
+              {toBnNum(category.nameBn)} ক্যাটাগরির আজকের বাজার মূল্য এবং পরিবর্তন
             </p>
           </div>
         </div>
