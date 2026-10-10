@@ -10,6 +10,13 @@ type MongoState = {
   usernameMigration?: Promise<void>;
 };
 
+class AuthConfigurationError extends Error {
+  constructor(readonly code: string, message: string) {
+    super(message);
+    this.name = "AuthConfigurationError";
+  }
+}
+
 const globalForMongo = globalThis as typeof globalThis & {
   bazardorMongo?: MongoState;
 };
@@ -93,12 +100,18 @@ let mongoState: MongoState | undefined;
 function initializeAuth() {
   const mongoUri = process.env.BETTER_AUTH_DB_URL;
   if (!mongoUri) {
-    throw new Error("BETTER_AUTH_DB_URL is required to start authentication.");
+    throw new AuthConfigurationError(
+      "AUTH_DB_URL_MISSING",
+      "BETTER_AUTH_DB_URL is required to start authentication.",
+    );
   }
 
   const authSecret = process.env.BETTER_AUTH_SECRET;
   if (!authSecret || authSecret.length < 32) {
-    throw new Error("BETTER_AUTH_SECRET must contain at least 32 characters.");
+    throw new AuthConfigurationError(
+      "AUTH_SECRET_INVALID",
+      "BETTER_AUTH_SECRET must contain at least 32 characters.",
+    );
   }
 
   const state =

@@ -83,7 +83,7 @@ export default function SignUpPage() {
               : res.error.code === "INVALID_ORIGIN"
                 ? "সাইটের auth domain ঠিকভাবে configure করা নেই। Vercel-এ BETTER_AUTH_URL production domain দিয়ে সেট করে redeploy করুন।"
                 : res.error.status >= 500
-                  ? "সার্ভার MongoDB-তে পৌঁছাতে পারছে না। MongoDB Atlas Network Access এবং Vercel-এর BETTER_AUTH_DB_URL পরীক্ষা করুন।"
+                  ? "Auth service চালু হতে পারেনি। Vercel Runtime Logs দেখুন এবং BETTER_AUTH_DB_URL, BETTER_AUTH_SECRET ও MongoDB Atlas Network Access পরীক্ষা করুন।"
               : res.error.code === "USERNAME_IS_ALREADY_TAKEN"
                 ? "নিবন্ধন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।"
                 : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";
@@ -108,12 +108,21 @@ export default function SignUpPage() {
   const handleSocialLogin = async (provider: "google" | "github") => {
     try {
       setLoading(true);
-      await signIn.social({
+      const res = await signIn.social({
         provider,
         callbackURL: "/",
       });
+
+      if (res?.error) {
+        toast.error(
+          res.error.status >= 500
+            ? "Auth service চালু হতে পারেনি। Vercel Runtime Logs ও database configuration পরীক্ষা করুন।"
+            : res.error.message || `${provider} দিয়ে সাইন ইন করতে ব্যর্থ হয়েছে`,
+        );
+        setLoading(false);
+      }
     } catch {
-      toast.error(`${provider} দিয়ে সাইন ইন করতে ব্যর্থ হয়েছে`);
+      toast.error("Auth service-এ সংযোগ করা যায়নি। Vercel Runtime Logs পরীক্ষা করুন।");
       setLoading(false);
     }
   };

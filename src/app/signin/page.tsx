@@ -38,7 +38,9 @@ function SignInForm() {
 
       if (res?.error) {
         const errorText =
-          res.error.message || "লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড সঠিক নয়।";
+          res.error.status >= 500
+            ? "Auth service চালু হতে পারেনি। Vercel Runtime Logs দেখুন এবং BETTER_AUTH_DB_URL, BETTER_AUTH_SECRET ও MongoDB Atlas Network Access পরীক্ষা করুন।"
+            : res.error.message || "লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড সঠিক নয়।";
         setErrorMessage(errorText);
         toast.error(errorText);
       } else {
@@ -59,12 +61,21 @@ function SignInForm() {
   const handleSocialLogin = async (provider: "google" | "github") => {
     try {
       setLoading(true);
-      await signIn.social({
+      const res = await signIn.social({
         provider,
         callbackURL: redirectUrl,
       });
+
+      if (res?.error) {
+        toast.error(
+          res.error.status >= 500
+            ? "Auth service চালু হতে পারেনি। Vercel Runtime Logs ও database configuration পরীক্ষা করুন।"
+            : res.error.message || `${provider} দিয়ে লগইন ব্যর্থ হয়েছে`,
+        );
+        setLoading(false);
+      }
     } catch {
-      toast.error(`${provider} দিয়ে লগইন সংযোগ করতে ব্যর্থ হয়েছে`);
+      toast.error("Auth service-এ সংযোগ করা যায়নি। Vercel Runtime Logs পরীক্ষা করুন।");
       setLoading(false);
     }
   };
