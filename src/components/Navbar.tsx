@@ -68,7 +68,7 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
           </Link>
 
           {/* Right Side: Auth buttons or User Profile */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             {session?.user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -147,10 +147,10 @@ export default function Navbar({ categories, tickerProducts = [] }: NavbarProps)
                 )}
               </div>
             ) : isSessionPending && !sessionError ? (
-              <div
-                aria-label="সেশন যাচাই হচ্ছে"
-                className="h-9 w-36 animate-pulse rounded-xl bg-gray-100"
-              />
+              <div aria-label="সেশন যাচাই হচ্ছে" className="flex items-center gap-2 sm:gap-3">
+                <div className="h-8 w-16 animate-pulse rounded-xl bg-gray-100 sm:h-9 sm:w-20" />
+                <div className="h-8 w-20 animate-pulse rounded-xl bg-emerald-100 sm:h-9 sm:w-24" />
+              </div>
             ) : (
               <div className="flex items-center gap-2 sm:gap-3">
                 <Link
