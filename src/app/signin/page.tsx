@@ -68,11 +68,6 @@ function SignInForm() {
     }
   };
 
-  const handleQuickDemo = () => {
-    setEmail("demo@bazardor.com");
-    setPassword("bazardor123");
-  };
-
   return (
     <div className="min-h-screen bg-[#f7faf7] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center px-4">
@@ -166,18 +161,6 @@ function SignInForm() {
             </div>
           </form>
 
-          {/* Quick Demo Fill Helper for Evaluator */}
-          <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-            <span className="text-[11px] text-gray-400">পরীক্ষক ডেমো টেস্ট:</span>
-            <button
-              type="button"
-              onClick={handleQuickDemo}
-              className="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
-            >
-              ডেমো ক্রেডেনশিয়াল পূরণ করুন
-            </button>
-          </div>
-
           {/* Social Logins */}
           <div className="mt-6">
             <div className="relative">
@@ -267,4 +250,3 @@ export default function SignInPage() {
     </Suspense>
   );
 }
-

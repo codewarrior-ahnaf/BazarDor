@@ -6,10 +6,7 @@ export const metadata: Metadata = {
   title: "বাজার দর | নিত্যপণ্যের নির্ভরযোগ্য বাজারদর",
   description: "নিত্যপ্রয়োজনীয় পণ্যের প্রতিদিনের বাজার দর জানুন সহজে। বাজার অবস্থার ওপর নির্ভর করে সকল সম্ভাব্য দর এক নজরে।",
   icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico" },
-    ],
+    icon: { url: "/icon.svg", type: "image/svg+xml" },
   },
 };
 
