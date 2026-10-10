@@ -49,7 +49,3 @@ body::-webkit-scrollbar {
   width: max-content;
   animation: ticker 110s linear infinite;
 }
-
-.animate-ticker:hover {
-  animation-play-state: paused;
-}

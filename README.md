@@ -48,8 +48,9 @@
 
 ## 📡 এপিআই অ্যান্ডপয়েন্টসমূহ (API Endpoints)
 
-- **Base URL 1:** `https://api.api-store.workers.dev/api/bazardor`
-- **Base URL 2 (Alternative):** `https://api.abcz.workers.dev/api/bazardor`
+- **Main API:** `https://openapi.programming-hero.com/api/bazardor`
+- **Fallback 1:** `https://api.api-store.workers.dev/api/bazardor`
+- **Fallback 2:** `https://api.abcz.workers.dev/api/bazardor`
 
 | মেথড | অ্যান্ডপয়েন্ট | বিবরণ |
 |------|-------------|-------|
@@ -59,7 +60,7 @@
 | `GET` | `/products?category=:slug` | নির্দিষ্ট ক্যাটাগরির পণ্য ফিল্টার |
 | `GET` | `/products/:id` | নির্দিষ্ট একটি পণ্যের বিশদ বাজারদর |
 
-> *সিস্টেমটি দুটি API অ্যান্ডপয়েন্ট ছাড়াও স্বয়ংক্রিয় ফলব্যাক ক্যাশ ধারণ করে, ফলে যেকোনো সার্ভার সমস্যাতেও অ্যাপ নিরবচ্ছিন্নভাবে চালু থাকে।*
+> *প্রতিটি request প্রথমে Main API-তে যায়। সেটি ব্যর্থ হলে ক্রমানুসারে Fallback 1 ও Fallback 2 চেষ্টা করা হয়; সব API ব্যর্থ হলে local JSON data ব্যবহার হয়।*
 
 ---
 

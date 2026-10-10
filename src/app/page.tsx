@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import ProductCard from "@/components/ProductCard";
+import IncrementalProductGrid from "@/components/IncrementalProductGrid";
 import { getCategories, getProducts } from "@/lib/api";
 import { TrendingUp, TrendingDown, LayoutGrid } from "lucide-react";
 
@@ -53,11 +53,12 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
-                {risers.map((product) => (
-                  <ProductCard key={`riser-${product.id}`} product={product} />
-                ))}
-              </div>
+              <IncrementalProductGrid
+                products={risers}
+                initialCount={4}
+                batchSize={4}
+                gridClassName="grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6"
+              />
             </section>
           )}
 
@@ -81,11 +82,12 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
-                {fallers.map((product) => (
-                  <ProductCard key={`faller-${product.id}`} product={product} />
-                ))}
-              </div>
+              <IncrementalProductGrid
+                products={fallers}
+                initialCount={4}
+                batchSize={4}
+                gridClassName="grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6"
+              />
             </section>
           )}
 
@@ -110,11 +112,7 @@ export default async function HomePage() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {products.map((product) => (
-                <ProductCard key={`product-${product.id}`} product={product} />
-              ))}
-            </div>
+            <IncrementalProductGrid products={products} />
           </section>
         </div>
       </main>

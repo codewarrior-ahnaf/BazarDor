@@ -2,32 +2,23 @@ import { Category, Product } from "@/types";
 import fallbackCategories from "@/data/categories.json";
 import fallbackProducts from "@/data/products.json";
 
+const MAIN_API_URL = "https://openapi.programming-hero.com/api/bazardor";
 const BASE_URL_1 = "https://api.api-store.workers.dev/api/bazardor";
 const BASE_URL_2 = "https://api.abcz.workers.dev/api/bazardor";
+const API_BASE_URLS = [MAIN_API_URL, BASE_URL_1, BASE_URL_2];
 
 async function fetchFromEndpoints<T>(endpoint: string): Promise<T | null> {
-  // Try primary base URL
-  try {
-    const res = await fetch(`${BASE_URL_1}${endpoint}`, {
-      next: { revalidate: 60 },
-    });
-    if (res.ok) {
-      return (await res.json()) as T;
+  for (const baseUrl of API_BASE_URLS) {
+    try {
+      const res = await fetch(`${baseUrl}${endpoint}`, {
+        next: { revalidate: 60 },
+      });
+      if (res.ok) {
+        return (await res.json()) as T;
+      }
+    } catch {
+      // Try the next API base URL.
     }
-  } catch {
-    // Continue to alternative
-  }
-
-  // Try secondary alternative base URL
-  try {
-    const res = await fetch(`${BASE_URL_2}${endpoint}`, {
-      next: { revalidate: 60 },
-    });
-    if (res.ok) {
-      return (await res.json()) as T;
-    }
-  } catch {
-    // Continue to fallback
   }
 
   return null;

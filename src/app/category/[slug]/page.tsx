@@ -14,10 +14,11 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const [categories, category, allProducts] = await Promise.all([
+  const [categories, category, allProducts, categoryProducts] = await Promise.all([
     getCategories(),
     getCategoryBySlug(slug),
     getProducts(),
+    getProducts(slug),
   ]);
 
   // If category does not exist, show friendly 404 state
@@ -51,13 +52,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   }
 
-  // Filter products for this category
-  const products = allProducts.filter(
+  // Use the category-filter endpoint, with a local match as a compatibility fallback.
+  const locallyFilteredProducts = allProducts.filter(
     (p) =>
       p.category === category.slug ||
       p.category === category.id ||
       p.categoryNameBn === category.nameBn
   );
+  const products = categoryProducts.length > 0 ? categoryProducts : locallyFilteredProducts;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f7faf7]">

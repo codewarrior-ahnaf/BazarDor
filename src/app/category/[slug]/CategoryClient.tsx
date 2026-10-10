@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import { Category, Product, SortOption } from "@/types";
-import ProductCard from "@/components/ProductCard";
+import IncrementalProductGrid from "@/components/IncrementalProductGrid";
 import { ArrowLeft, ArrowUpDown, ChevronDown, ShoppingBag } from "lucide-react";
 
 interface CategoryClientProps {
@@ -16,6 +16,13 @@ export default function CategoryClient({
   initialProducts,
 }: CategoryClientProps) {
   const [sortBy, setSortBy] = useState<SortOption>("default");
+  const [sortMenuOpen, setSortMenuOpen] = useState(false);
+  const sortMenuRef = useRef<HTMLDivElement>(null);
+  const sortOptions: { value: SortOption; label: string }[] = [
+    { value: "default", label: "ডিফল্ট" },
+    { value: "price-asc", label: "দাম: কম থেকে বেশি" },
+    { value: "price-desc", label: "দাম: বেশি থেকে কম" },
+  ];
 
   // Sort by numeric price value (Challenge C1)
   const sortedProducts = useMemo(() => {
@@ -66,24 +73,85 @@ export default function CategoryClient({
         {/* Challenge C1: Sort dropdown with Chevron icon */}
         <div className="flex max-w-full flex-wrap items-center gap-2.5 rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-2 self-stretch sm:self-auto">
           <ArrowUpDown className="w-4 h-4 text-gray-500" />
-          <label
-            htmlFor="sort-select"
-            className="text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap"
-          >
+          <span className="text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
             সাজান:
-          </label>
-          <div className="relative min-w-0 flex-1 sm:flex-none">
-            <select
-              id="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="w-full max-w-full appearance-none rounded-xl border border-gray-200 bg-white py-1.5 pl-3 pr-8 text-xs font-medium text-gray-800 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-emerald-500 sm:w-auto sm:text-sm"
+          </span>
+          <div
+            className="relative min-w-0 flex-1 sm:flex-none"
+            ref={sortMenuRef}
+            onBlur={(event) => {
+              const nextTarget = event.relatedTarget;
+              if (!(nextTarget instanceof Node) || !sortMenuRef.current?.contains(nextTarget)) {
+                setSortMenuOpen(false);
+              }
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                setSortMenuOpen(false);
+                sortMenuRef.current
+                  ?.querySelector<HTMLButtonElement>('button[aria-haspopup="menu"]')
+                  ?.focus();
+                return;
+              }
+              if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+                const items = sortMenuRef.current?.querySelectorAll<HTMLButtonElement>(
+                  '[role="menuitemradio"]'
+                );
+                if (!items?.length) return;
+                event.preventDefault();
+                const currentIndex = Array.from(items).indexOf(document.activeElement as HTMLButtonElement);
+                const nextIndex = event.key === "Home"
+                  ? 0
+                  : event.key === "End"
+                    ? items.length - 1
+                    : (currentIndex + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+                items[nextIndex].focus();
+              }
+            }}
+          >
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={sortMenuOpen}
+              onClick={() => setSortMenuOpen((open) => !open)}
+              className="flex w-full items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-white py-2 pl-3 pr-3 text-left text-xs font-semibold text-gray-800 shadow-xs transition-colors hover:border-emerald-400 hover:bg-emerald-50/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 sm:min-w-40 sm:text-sm"
             >
-              <option value="default">ডিফল্ট</option>
-              <option value="price-asc">দাম: কম থেকে বেশি</option>
-              <option value="price-desc">দাম: বেশি থেকে কম</option>
-            </select>
-            <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <span>{sortOptions.find((option) => option.value === sortBy)?.label}</span>
+              <ChevronDown
+                className={`h-4 w-4 shrink-0 text-emerald-700 transition-transform ${sortMenuOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            {sortMenuOpen && (
+              <div
+                role="menu"
+                aria-label="পণ্য সাজানোর পদ্ধতি"
+                className="absolute right-0 top-full z-20 mt-2 w-full min-w-48 overflow-hidden rounded-2xl border border-emerald-100 bg-white p-1.5 shadow-xl shadow-emerald-950/10 ring-1 ring-black/5 sm:w-56"
+              >
+                {sortOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={sortBy === option.value}
+                    onClick={() => {
+                      setSortBy(option.value);
+                      setSortMenuOpen(false);
+                      sortMenuRef.current
+                        ?.querySelector<HTMLButtonElement>('button[aria-haspopup="menu"]')
+                        ?.focus();
+                    }}
+                    className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-xs font-medium transition-colors sm:text-sm ${
+                      sortBy === option.value
+                        ? "bg-emerald-700 text-white"
+                        : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-800"
+                    }`}
+                  >
+                    {option.label}
+                    {sortBy === option.value && <span aria-hidden="true">✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -110,11 +178,7 @@ export default function CategoryClient({
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {sortedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <IncrementalProductGrid products={sortedProducts} />
       )}
     </div>
   );
