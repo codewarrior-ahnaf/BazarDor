@@ -8,12 +8,15 @@ import toast from "react-hot-toast";
 import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, Check, Circle, ShoppingCart } from "lucide-react";
 
 function usernameFromName(name: string) {
-  return name
+  const nameSlug = name
     .trim()
     .toLowerCase()
     .replace(/[^\p{L}\p{N}_.-]+/gu, "_")
     .replace(/_{2,}/g, "_")
     .replace(/^[_\-.]+|[_\-.]+$/g, "");
+
+  const uniqueSuffix = crypto.randomUUID().replaceAll("-", "").slice(0, 10);
+  return `${(nameSlug || "user").slice(0, 53)}_${uniqueSuffix}`;
 }
 
 export default function SignUpPage() {
@@ -45,9 +48,8 @@ export default function SignUpPage() {
       return;
     }
 
-    const username = usernameFromName(name);
-    if (!username || name.trim().length > 64 || username.length > 64) {
-      const msg = "নামটি থেকে গ্রহণযোগ্য ইউজারনেম তৈরি করা যাচ্ছে না";
+    if (name.trim().length > 64) {
+      const msg = "নাম ৬৪ অক্ষরের মধ্যে লিখুন";
       setErrorMessage(msg);
       toast.error(msg);
       return;
@@ -62,26 +64,33 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
-      const res = await signUp.email({
-        name: name.trim(),
-        username,
-        email: email.trim(),
-        password,
-      });
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const res = await signUp.email({
+          name: name.trim(),
+          username: usernameFromName(name),
+          email: email.trim(),
+          password,
+        });
 
-      if (res?.error) {
-        const errorText =
-          res.error.code === "USERNAME_IS_ALREADY_TAKEN"
-            ? "এই নামটি দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট তৈরি হয়েছে"
-            : res.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
+        if (res?.error?.code === "USERNAME_IS_ALREADY_TAKEN" && attempt < 2) {
+          continue;
+        }
+
+        if (res?.error) {
+          const errorText =
+            res.error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
               ? "এই ইমেইলটি আগে থেকেই ব্যবহার করা হয়েছে"
-              : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";
-        setErrorMessage(errorText);
-        toast.error(errorText);
-      } else {
+              : res.error.code === "USERNAME_IS_ALREADY_TAKEN"
+                ? "নিবন্ধন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।"
+                : "নিবন্ধন ব্যর্থ হয়েছে। তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।";
+          setErrorMessage(errorText);
+          toast.error(errorText);
+          return;
+        }
+
         toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! এবার লগইন করুন।");
-        // Requirement: "If the user Register successfully then navigate him to his login page."
         router.push("/signin");
+        return;
       }
     } catch {
       const msg = "নিবন্ধন সম্পন্ন করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
