@@ -10,7 +10,11 @@ import { Lock, Mail, ArrowRight, Loader2, Eye, EyeOff, ShoppingCart } from "luci
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/";
+  const requestedRedirect = searchParams.get("redirect");
+  const redirectUrl =
+    requestedRedirect?.startsWith("/") && !requestedRedirect.startsWith("//")
+      ? requestedRedirect
+      : "/";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +26,15 @@ function SignInForm() {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!email || !password) {
+    if (!email.trim() || !password) {
       const msg = "ইমেইল এবং পাসওয়ার্ড উভয় ফিল্ড পূরণ করুন";
+      setErrorMessage(msg);
+      toast.error(msg);
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      const msg = "সঠিক ইমেইল ঠিকানা লিখুন";
       setErrorMessage(msg);
       toast.error(msg);
       return;
@@ -105,7 +116,7 @@ function SignInForm() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div>
               <label
                 htmlFor="email"
@@ -267,7 +278,18 @@ export default function SignInPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-[#f7faf7] flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-emerald-700" />
+          <div
+            className="w-full max-w-md space-y-5 rounded-3xl border border-gray-200/90 bg-white p-8 shadow-xs"
+            aria-label="লগইন পেজ লোড হচ্ছে"
+            aria-busy="true"
+          >
+            <div className="mx-auto h-8 w-40 animate-pulse rounded-lg bg-gray-200" />
+            <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100" />
+            <div className="h-11 animate-pulse rounded-xl bg-gray-100" />
+            <div className="h-11 animate-pulse rounded-xl bg-gray-100" />
+            <div className="h-12 animate-pulse rounded-xl bg-emerald-100" />
+            <div className="h-10 animate-pulse rounded-xl bg-gray-100" />
+          </div>
         </div>
       }
     >

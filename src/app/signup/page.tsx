@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp, signIn } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, Check, Circle, ShoppingCart } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User, ArrowRight, Loader2, ShoppingCart } from "lucide-react";
 
 function usernameFromName(name: string) {
   const nameSlug = name
@@ -29,20 +29,19 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const passwordChecks = useMemo(() => [
-    { label: "কমপক্ষে ৮ অক্ষর", passed: password.length >= 8 },
-    { label: "বড় হাতের ও ছোট হাতের অক্ষর", passed: /[A-Z]/.test(password) && /[a-z]/.test(password) },
-    { label: "কমপক্ষে একটি সংখ্যা ও একটি বিশেষ চিহ্ন", passed: /\d/.test(password) && /[^A-Za-z0-9]/.test(password) },
-  ], [password]);
-  const passedChecks = passwordChecks.filter((check) => check.passed).length;
-  const strength = password.length === 0 ? null : passedChecks === 3 ? "strong" : passedChecks === 2 ? "medium" : "weak";
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
     if (!name.trim() || !email.trim() || !password) {
       const msg = "সকল প্রয়োজনীয় তথ্য পূরণ করুন";
+      setErrorMessage(msg);
+      toast.error(msg);
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      const msg = "সঠিক ইমেইল ঠিকানা লিখুন";
       setErrorMessage(msg);
       toast.error(msg);
       return;
@@ -55,8 +54,8 @@ export default function SignUpPage() {
       return;
     }
 
-    if (passedChecks < 3) {
-      const msg = "শক্তিশালী পাসওয়ার্ডের তিনটি শর্তই পূরণ করুন";
+    if (password.length < 8) {
+      const msg = "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে";
       setErrorMessage(msg);
       toast.error(msg);
       return;
@@ -152,7 +151,7 @@ export default function SignUpPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div>
               <label
                 htmlFor="name"
@@ -235,26 +234,6 @@ export default function SignUpPage() {
                   )}
                 </button>
               </div>
-              {password.length > 0 && (
-                <div className="mt-3 space-y-2" aria-live="polite">
-                  <div className="flex items-center gap-2">
-                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100" aria-hidden="true">
-                      <div className={`h-full rounded-full transition-all ${strength === "strong" ? "w-full bg-emerald-600" : strength === "medium" ? "w-2/3 bg-amber-500" : "w-1/3 bg-rose-500"}`} />
-                    </div>
-                    <span className={`text-xs font-semibold ${strength === "strong" ? "text-emerald-700" : strength === "medium" ? "text-amber-700" : "text-rose-700"}`}>
-                      {strength === "strong" ? "শক্তিশালী" : strength === "medium" ? "মাঝারি" : "দুর্বল"}
-                    </span>
-                  </div>
-                  <ul className="space-y-1 text-xs text-gray-600">
-                    {passwordChecks.map((check) => (
-                      <li key={check.label} className="flex items-center gap-2">
-                        {check.passed ? <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> : <Circle className="h-3.5 w-3.5 text-gray-300" aria-hidden="true" />}
-                        <span className={check.passed ? "text-emerald-700" : ""}>{check.label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
 
             <div className="pt-2">

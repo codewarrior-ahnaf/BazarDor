@@ -1,48 +1,33 @@
+import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { betterAuth } from "better-auth";
 import { username } from "better-auth/plugins";
 import { MongoClient } from "mongodb";
-import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
 type MongoState = {
   uri: string;
   client: MongoClient;
   connection?: Promise<MongoClient>;
-  usernameMigration?: Promise<void>;
 };
-
-class AuthConfigurationError extends Error {
-  constructor(readonly code: string, message: string) {
-    super(message);
-    this.name = "AuthConfigurationError";
-  }
-}
 
 const globalForMongo = globalThis as typeof globalThis & {
   bazardorMongo?: MongoState;
 };
 
-function createAuth(state: MongoState) {
+function createAuth(mongo: MongoState) {
   const isDevelopment = process.env.NODE_ENV === "development";
-  const vercelHost =
-    process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-  const baseURL =
-    isDevelopment
-      ? "http://localhost:3000"
-      : process.env.BETTER_AUTH_URL ||
-        (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
-  const vercelOrigins = [
+  const vercelHosts = [
     process.env.VERCEL_URL,
     process.env.VERCEL_BRANCH_URL,
     process.env.VERCEL_PROJECT_PRODUCTION_URL,
-  ]
-    .filter((host): host is string => Boolean(host))
-    .map((host) => `https://${host}`);
+  ].filter((host): host is string => Boolean(host));
+  const baseURL =
+    (isDevelopment ? "http://localhost:3000" : process.env.BETTER_AUTH_URL) ||
+    (vercelHosts[0] ? `https://${vercelHosts[0]}` : "http://localhost:3000");
 
   return betterAuth({
-    database: mongodbAdapter(
-      state.client.db(process.env.MONGODB_DATABASE || "bazardor"),
-      { client: state.client },
-    ),
+    database: mongodbAdapter(mongo.client.db("bazar-dor"), {
+      client: mongo.client,
+    }),
     baseURL,
     trustedOrigins: [
       ...new Set([
@@ -50,20 +35,10 @@ function createAuth(state: MongoState) {
         ...(isDevelopment
           ? ["http://localhost:3000", "http://127.0.0.1:3000"]
           : []),
-        ...vercelOrigins,
+        ...vercelHosts.map((host) => `https://${host}`),
       ]),
     ],
-    secret: process.env.BETTER_AUTH_SECRET!,
-    rateLimit: {
-      enabled: true,
-      storage: "database",
-      window: 60,
-      max: 100,
-      customRules: {
-        "/sign-in/email": { window: 60, max: 10 },
-        "/sign-up/email": { window: 60, max: 5 },
-      },
-    },
+    secret: process.env.BETTER_AUTH_SECRET,
     emailAndPassword: {
       enabled: true,
       minPasswordLength: 8,
@@ -81,7 +56,16 @@ function createAuth(state: MongoState) {
         clientSecret: process.env.BETTER_AUTH_GITHUB_SECRET as string,
       },
     },
-    user: { changeEmail: { enabled: true } },
+    rateLimit: {
+      enabled: true,
+      storage: "database",
+      window: 60,
+      max: 100,
+      customRules: {
+        "/sign-in/email": { window: 60, max: 10 },
+        "/sign-up/email": { window: 60, max: 5 },
+      },
+    },
     plugins: [
       username({
         minUsernameLength: 1,
@@ -98,39 +82,34 @@ let authInstance: AuthInstance | undefined;
 let mongoState: MongoState | undefined;
 
 function initializeAuth() {
-  const mongoUri = process.env.BETTER_AUTH_DB_URL;
-  if (!mongoUri) {
-    throw new AuthConfigurationError(
-      "AUTH_DB_URL_MISSING",
-      "BETTER_AUTH_DB_URL is required to start authentication.",
+  const uri = process.env.BETTER_AUTH_DB_URL;
+  if (!uri) {
+    throw new Error("BETTER_AUTH_DB_URL is required to start authentication.");
+  }
+
+  const secret = process.env.BETTER_AUTH_SECRET;
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      "BETTER_AUTH_SECRET must contain at least 32 characters to start authentication.",
     );
   }
 
-  const authSecret = process.env.BETTER_AUTH_SECRET;
-  if (!authSecret || authSecret.length < 32) {
-    throw new AuthConfigurationError(
-      "AUTH_SECRET_INVALID",
-      "BETTER_AUTH_SECRET must contain at least 32 characters.",
-    );
-  }
-
-  const state =
-    globalForMongo.bazardorMongo?.uri === mongoUri
+  const mongo =
+    globalForMongo.bazardorMongo?.uri === uri
       ? globalForMongo.bazardorMongo
       : {
-          uri: mongoUri,
-          client: new MongoClient(mongoUri, {
+          uri,
+          client: new MongoClient(uri, {
             serverSelectionTimeoutMS: 10_000,
             connectTimeoutMS: 10_000,
           }),
         };
-  globalForMongo.bazardorMongo = state;
-  mongoState = state;
 
-  const auth = createAuth(state);
-  authInstance = auth;
+  globalForMongo.bazardorMongo = mongo;
+  mongoState = mongo;
+  authInstance = createAuth(mongo);
 
-  return { auth, mongo: state };
+  return { auth: authInstance, mongo };
 }
 
 export function getAuth(): AuthInstance {
@@ -141,39 +120,11 @@ export async function connectMongo(): Promise<MongoClient> {
   const mongo = mongoState ?? initializeAuth().mongo;
   if (!mongo.connection) {
     const connection = mongo.client.connect().finally(() => {
-      if (mongo.connection === connection) mongo.connection = undefined;
+      if (mongo.connection === connection) {
+        mongo.connection = undefined;
+      }
     });
     mongo.connection = connection;
   }
-  const client = await mongo.connection;
-
-  if (!mongo.usernameMigration) {
-    const legacyUsername = {
-      $concat: ["user_", { $toString: "$_id" }],
-    };
-    const migration = client
-      .db(process.env.MONGODB_DATABASE || "bazardor")
-      .collection("user")
-      .updateMany(
-        { username: { $exists: false } },
-        [
-          {
-            $set: {
-              username: legacyUsername,
-              displayUsername: legacyUsername,
-            },
-          },
-        ],
-      )
-      .then(() => undefined);
-    mongo.usernameMigration = migration;
-    migration.catch(() => {
-      if (mongo.usernameMigration === migration) {
-        mongo.usernameMigration = undefined;
-      }
-    });
-  }
-
-  await mongo.usernameMigration;
-  return client;
+  return mongo.connection;
 }
