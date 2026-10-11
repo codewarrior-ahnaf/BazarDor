@@ -24,8 +24,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!isPending && !session?.user) {
-      toast.error("প্রোফাইল দেখতে অনুগ্রহ করে লগইন করুন");
-      router.replace("/signin?redirect=/profile");
+      router.replace("/signin?redirect=/profile&reason=auth-required");
     }
   }, [session, isPending, router]);
 

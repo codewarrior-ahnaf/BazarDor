@@ -15,17 +15,21 @@ interface ProductPageProps {
 
 export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const { slug } = await params;
+  const product = await getProductBySlugOrId(slug);
+  if (!product) notFound();
+
   await connectMongo();
   const session = await getAuth().api.getSession({ headers: await headers() });
-  if (!session) redirect(`/signin?redirect=${encodeURIComponent(`/product/${slug}`)}`);
+  if (!session) {
+    redirect(
+      `/signin?redirect=${encodeURIComponent(`/product/${slug}`)}&reason=auth-required`,
+    );
+  }
 
-  const [categories, product, allProducts] = await Promise.all([
+  const [categories, allProducts] = await Promise.all([
     getCategories(),
-    getProductBySlugOrId(slug),
     getProducts(),
   ]);
-
-  if (!product) notFound();
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f7faf7]">

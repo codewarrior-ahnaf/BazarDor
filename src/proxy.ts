@@ -1,7 +1,7 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = ["/product", "/profile"];
+const protectedRoutes = ["/profile"];
 
 export function proxy(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.some(
@@ -19,9 +19,10 @@ export function proxy(request: NextRequest) {
     "redirect",
     `${request.nextUrl.pathname}${request.nextUrl.search}`,
   );
+  signInUrl.searchParams.set("reason", "auth-required");
   return NextResponse.redirect(signInUrl);
 }
 
 export const config = {
-  matcher: ["/product/:path*", "/profile/:path*"],
+  matcher: ["/profile/:path*"],
 };

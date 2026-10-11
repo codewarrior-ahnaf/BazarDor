@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
@@ -11,10 +11,19 @@ function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedRedirect = searchParams.get("redirect");
+  const authRequired = searchParams.get("reason") === "auth-required";
   const redirectUrl =
     requestedRedirect?.startsWith("/") && !requestedRedirect.startsWith("//")
       ? requestedRedirect
       : "/";
+
+  useEffect(() => {
+    if (authRequired) {
+      toast.error("এই পৃষ্ঠাটি দেখতে অনুগ্রহ করে লগইন করুন", {
+        id: "auth-required",
+      });
+    }
+  }, [authRequired]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

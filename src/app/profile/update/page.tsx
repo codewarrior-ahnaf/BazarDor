@@ -222,8 +222,7 @@ export default function UpdateProfilePage() {
 
   useEffect(() => {
     if (!isPending && !session?.user) {
-      toast.error("তথ্য পরিবর্তন করতে অনুগ্রহ করে লগইন করুন");
-      router.replace("/signin?redirect=/profile/update");
+      router.replace("/signin?redirect=/profile/update&reason=auth-required");
     }
   }, [session, isPending, router]);
 
@@ -259,4 +258,3 @@ export default function UpdateProfilePage() {
     </div>
   );
 }
-
