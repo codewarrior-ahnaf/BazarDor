@@ -1,111 +1,74 @@
-# 🛒 বাজার দর (BazarDor) - নিত্যপণ্যের দৈনিক বাজারদর প্ল্যাটফর্ম
+<div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![BetterAuth](https://img.shields.io/badge/BetterAuth-Enabled-emerald?style=for-the-badge)](https://better-auth.com/)
+# 🛒 বাজার দর | BazarDor
 
-**বাজার দর (BazarDor)** হলো একটি আধুনিক, নির্ভরযোগ্য এবং সম্পূর্ণ রেসপনসিভ নিত্যপ্রয়োজনীয় পণ্যের বাজারদর মনিটরিং ওয়েব অ্যাপ্লিকেশন। এর মাধ্যমে ব্যবহারকারীরা প্রতিদিনের চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম-দুধ এবং মসলার নির্ভরযোগ্য বাজারমূল্য, মূল্যের হ্রাস-বৃদ্ধি এবং দেশের প্রধান পাইকারি ও খুচরা বাজারসমূহের তুলনামূলক বিশ্লেষণ এক নজরে জানতে পারেন।
+### নিত্যপ্রয়োজনীয় পণ্যের বাজারদর এক নজরে
 
----
+বাংলাদেশের দৈনন্দিন বাজারদর দেখুন, পণ্যের দাম তুলনা করুন এবং বাজার সম্পর্কে জানুন—একটি সহজ, বাংলা-ভিত্তিক প্ল্যাটফর্মে।
 
-## 🌟 মূল বৈশিষ্ট্যসমূহ (Key Features)
+[Live Website](https://bazardor-dun.vercel.app)
 
-1. **রিয়েল-টাইম প্রাইস টিকার (Live Price Ticker Marquee):**  
-   ওয়েবসাইটের শীর্ষে স্বয়ংক্রিয়ভাবে চলমান ইনফিনিট মারকুই স্ট্রিপ, যেখানে প্রতিটি পণ্যের আইকন, নাম, একক প্রতি আজকের দাম এবং মূল্য বৃদ্ধির/হ্রাসের শতকরা হার (▲ ২.১% / ▼ ১.৫%) প্রদর্শিত হয়।
-
-2. **উন্নত ক্যাটাগরি ও সংখ্যাভিত্তিক সর্টিং (Challenge C1):**  
-   ক্যাটাগরি পেজে যেকোনো ক্যাটাগরির (চাল, ডাল, তেল, সবজি ইত্যাদি) পণ্যসমূহ ব্রাউজ করার পাশাপাশি **সাজান:** ড্রপডাউন (ডিফল্ট, দাম: কম থেকে বেশি, দাম: বেশি থেকে কম) ব্যবহার করে পণ্য সাজানো যায়। এটি নিখুঁত সংখ্যাগত মানের ওপর ভিত্তি করে সাজানো নিশ্চিত করে।
-
-3. **শীর্ষ দর পরিবর্তন সেকশন (Top Risers & Fallers):**  
-   হোম পেজে আজকের সবচেয়ে বেশি দাম বৃদ্ধি পাওয়া শীর্ষ ৬টি পণ্য (“আজ দাম বেড়েছে ▲”) এবং সবচেয়ে বেশি দাম কমা শীর্ষ ৬টি পণ্য (“আজ দাম কমেছে ▼”) আলাদা হাইলাইট সেকশনে প্রদর্শিত হয়।
-
-4. **বাজারভিত্তিক তুলনামূলক বিশ্লেষণ ও সুরক্ষিত রাউট (Protected Details Page):**  
-   পণ্যের বিস্তারিত পেজটি (`/product/[slug]`) অথেন্টিকেশন দ্বারা সুরক্ষিত। লগইন করা ব্যবহারকারীরা পণ্যের আজকের জাতীয় গড় দর, সর্বনিম্ন দর, সর্বোচ্চ দর এবং রাজধানী ঢাকাসহ সারাদেশের বিভিন্ন পাইকারি ও খুচরা বাজারের বিস্তারিত তুলনামূলক তালিকা দেখতে পারেন। অননুমোদিত ব্যবহারকারীদের স্বয়ংক্রিয় টোস্ট সতর্কতাসহ লগইন পেজে রিডাইরেক্ট করা হয়।
-
-5. **প্রোফাইল ও তথ্য আপডেট ফিচার (Challenge C3):**  
-   ব্যবহারকারী লগইন করার পর প্রোফাইল মেনু ও প্রোফাইল পেজ (`/profile`) অ্যাক্সেস করতে পারেন। Challenge C3 অনুসারে, প্রোফাইল পেজের "তথ্য পরিবর্তন" বাটনে ক্লিক করে ডেডিকেটেড রুটে (`/profile/update`) গিয়ে ব্যবহারকারী তার নাম হালনাগাদ (Update Information) করতে পারেন, যা BetterAuth-এর `updateUser` API দ্বারা পরিচালিত।
-
-6. **সম্পূর্ণ বাংলা লোকালাইজেশন ও রেসপনসিভ ডিজাইন:**  
-   সমস্ত মূল্য, শতকরা হার এবং তারিখ বাংলা সংখ্যায় (যেমন: ১৪৮ টাকা, ১,৮৫০ টাকা) প্রদর্শিত। মোবাইল, ট্যাবলেট এবং ডেস্কটপ সব ডিভাইসে ফ্লুইড রেসপনসিভ লেআউট।
-
-7. **কাস্টম ফ্রেন্ডলি ৪০৪ ও লোডিং কঙ্কাল (Loading Skeleton):**  
-   যেকোনো ভুল রাউট বা অনুপস্থিত পণ্যের জন্য ফ্রেন্ডলি ৪০৪ পেজ এবং ডেটা ফেচিংয়ের সময়ে মসৃণ স্কেলিটন অ্যানিমেশন।
+</div>
 
 ---
 
-## 🛠️ ব্যবহৃত প্রযুক্তিসমূহ (Technologies Used)
+## ✨ মূল ফিচারসমূহ
 
-- **Framework:** [Next.js](https://nextjs.org/) (App Router, Server Components & Client Components)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Authentication:** [BetterAuth](https://better-auth.com/) (Email/Password, Google & GitHub Social Login, User Update)
-- **Database:** MongoDB (Better Auth MongoDB adapter)
-- **Notification / Feedback:** [react-hot-toast](https://react-hot-toast.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
+### ১. দৈনিক বাজারদর
+চাল, ডাল, তেল, সবজি, মাছ, মাংসসহ নিত্যপ্রয়োজনীয় পণ্যের বর্তমান দাম ও দামের পরিবর্তন দেখুন।
 
----
+### ২. দাম বাড়া-কমার তালিকা
+হোম পেজে সবচেয়ে বেশি দাম বেড়েছে এবং কমেছে—এমন পণ্যগুলো আলাদাভাবে দেখুন।
 
-## 📡 এপিআই অ্যান্ডপয়েন্টসমূহ (API Endpoints)
+### ৩. ক্যাটাগরি ও মূল্যভিত্তিক সাজানো
+ক্যাটাগরি অনুযায়ী পণ্য খুঁজুন এবং দাম কম থেকে বেশি বা বেশি থেকে কম ক্রমে সাজান।
 
-- **Main API:** `https://openapi.programming-hero.com/api/bazardor`
+### ৪. পণ্যের বিস্তারিত ও বাজার তুলনা
+লগইন করে পণ্যের সর্বনিম্ন, সর্বোচ্চ ও গড় দামসহ বাজারভিত্তিক মূল্য তুলনা দেখুন।
 
-| মেথড | অ্যান্ডপয়েন্ট | বিবরণ |
-|------|-------------|-------|
-| `GET` | `/categories` | সকল ক্যাটাগরির তালিকা |
-| `GET` | `/categories/:slug` | নির্দিষ্ট একটি ক্যাটাগরির তথ্য |
-| `GET` | `/products` | সকল পণ্যের তালিকা |
-| `GET` | `/products?category=:slug` | নির্দিষ্ট ক্যাটাগরির পণ্য ফিল্টার |
-| `GET` | `/products/:id` | নির্দিষ্ট একটি পণ্যের বিশদ বাজারদর |
+### ৫. নিরাপদ অ্যাকাউন্ট ও প্রোফাইল
+ইমেইল-পাসওয়ার্ড, Google বা GitHub দিয়ে অ্যাকাউন্টে প্রবেশ করুন; প্রোফাইল দেখুন ও নিজের নাম হালনাগাদ করুন।
 
-> *সব product ও category data Main API থেকে নেওয়া হয়। API অনুপলব্ধ হলে friendly error state দেখানো হয়; local JSON বা বিকল্প API ব্যবহার করা হয় না।*
+অতিরিক্তভাবে, ওয়েবসাইটটি মোবাইল, ট্যাবলেট ও ডেস্কটপে ব্যবহারযোগ্য এবং এতে লোডিং skeleton, toast notification ও বন্ধুসুলভ 404 পেজ রয়েছে।
 
----
+## 🧰 Technologies Used
 
-## 🚀 লোকাল সেটআপ ও ইনস্টলেশন (Getting Started)
+| Technology | ব্যবহার |
+| --- | --- |
+| [Next.js](https://nextjs.org/) | App Router, পেজ ও সার্ভার-সাইড rendering |
+| [React](https://react.dev/) | ব্যবহারকারী ইন্টারফেস |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe development |
+| [Tailwind CSS](https://tailwindcss.com/) | Responsive styling |
+| [Better Auth](https://www.better-auth.com/) | Email/password ও social authentication |
+| [MongoDB](https://www.mongodb.com/) | Authentication data সংরক্ষণ |
+| [react-hot-toast](https://react-hot-toast.com/) | ব্যবহারকারীকে status ও error feedback |
+| [Lucide React](https://lucide.dev/) | Interface icons |
+| [Vercel](https://vercel.com/) | Deployment |
 
-### ১. ক্লোন ও নির্ভরতাসমূহ ইনস্টল করুন:
+## 🚀 লোকাল কম্পিউটারে চালানো
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/codewarrior-ahnaf/BazarDor.git
 cd BazarDor
 npm install
-```
-
-### ২. এনভায়রনমেন্ট ভেরিয়েবল সেটআপ:
-`.env.local` ফাইলে নিচের কনফিগারেশন যোগ করুন:
-```env
-BETTER_AUTH_SECRET=<generate a unique secret with: openssl rand -base64 32>
-BETTER_AUTH_URL=http://localhost:3000 # local only; use your deployed HTTPS URL on Vercel
-BETTER_AUTH_DB_URL=mongodb+srv://<username>:<password>@<cluster>/?retryWrites=true&w=majority
-```
-
-Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `BETTER_AUTH_DB_URL` আবশ্যক। অ্যাপ MongoDB URI-তে নির্দিষ্ট database উপেক্ষা করে `bazar-dor` database ব্যবহার করে। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `BETTER_AUTH_DB_URL`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
-
-Vercel deployment-এর Environment Variables-এ `BETTER_AUTH_SECRET`, `BETTER_AUTH_DB_URL`, এবং `BETTER_AUTH_URL` Production (এবং Preview ব্যবহার করলে Preview)-এর জন্য আলাদাভাবে সেট করে নতুন deployment তৈরি করো। `BETTER_AUTH_URL`-এ `https://`-সহ আসল deployed/custom domain দাও—`http://localhost:3000` নয়। Vercel-এ URL বাদ পড়লে অ্যাপ Vercel deployment URL ব্যবহার করবে; production URL ভুল করে localhost হলে সেটিও বাদ দিয়ে Vercel URL নেওয়া হবে। Secret হিসেবে উপরের command দিয়ে তৈরি নিজস্ব random value ব্যবহার করো; `.env` বা Git-এ secret commit কোরো না।
-
-Google/GitHub sign-in চালু করতে সংশ্লিষ্ট provider-এর `BETTER_AUTH_GOOGLE_CLIENT_ID`, `BETTER_AUTH_GOOGLE_SECRET`, `BETTER_AUTH_GITHUB_CLIENT_ID`, এবং `BETTER_AUTH_GITHUB_SECRET` Vercel-এ যোগ করো। Provider credentials না থাকলেও email/password authentication চালু থাকবে। OAuth provider console-এ callback URL হিসেবে `https://<your-deployed-domain>/api/auth/callback/google` অথবা `https://<your-deployed-domain>/api/auth/callback/github` অনুমোদন করো।
-
-Deploy-এর পর signup/signin ব্যর্থ হলে Vercel-এর **Functions → `/api/auth/[...all]` → Logs**-এ সংশ্লিষ্ট request দেখো। `AUTH_SERVICE_UNAVAILABLE` বা MongoDB timeout হলে `BETTER_AUTH_DB_URL` credentials/URI যাচাই করো এবং MongoDB Atlas Network Access থেকে Vercel runtime-এ database connection অনুমোদিত কি না নিশ্চিত করো। Environment Variable পরিবর্তনের পর redeploy আবশ্যক।
-
-Local development-এ auth callback `http://localhost:3000` ব্যবহার করে, `.env`-এ production `BETTER_AUTH_URL` থাকলেও। Google OAuth local-এ পরীক্ষা করতে Google Cloud Console-এর Authorized redirect URIs-এ `http://localhost:3000/api/auth/callback/google` যোগ করো। Production-এর জন্য আলাদাভাবে deployed domain-এর `https://<your-domain>/api/auth/callback/google` যোগ করতে হবে।
-
-Vercel-এ auth request timeout বা `500` হলে MongoDB Atlas-এর Network Access-এ Vercel runtime থেকে database-এ পৌঁছানোর অনুমতি আছে কি না যাচাই করো। সম্ভব হলে স্থির egress IP/private networking ব্যবহার করো; তা না থাকলে `0.0.0.0/0` allow করার আগে database user-কে শুধু প্রয়োজনীয় database-এ সীমাবদ্ধ করে শক্তিশালী password ব্যবহার করো। Vercel-এর `BETTER_AUTH_DB_URL`-এ Atlas URI-টি সঠিক database credentials-সহ সেট করে redeploy করো।
-
-নিবন্ধনের সময় পুরো নাম থেকে স্বয়ংক্রিয়ভাবে username তৈরি হয়; আলাদা username field নেই এবং একই নাম একাধিক account-এ ব্যবহার করা যায়। Username-এ collision এড়াতে random suffix যোগ হয়। শুধু আগে থেকে ব্যবহৃত email-এ toast দেখানো হয়। আগে থেকে থাকা account-এ username না থাকলে MongoDB-তে প্রথম auth connection-এ `user_<id>` username স্বয়ংক্রিয়ভাবে বসে; email/password login অপরিবর্তিত থাকে। একাধিক ব্যবহারকারী একই পাসওয়ার্ড ব্যবহার করতে পারেন—Better Auth প্রতিটি অ্যাকাউন্টের পাসওয়ার্ড আলাদাভাবে hash করে। Auth API-তে rate limiting চালু আছে।
-
-### ৩. ডেভেলপমেন্ট সার্ভার চালু করুন:
-```bash
 npm run dev
 ```
-ব্রাউজারে [http://localhost:3000](http://localhost:3000) ওপেন করুন।
 
-### ৪. প্রোডাকশন বিল্ড তৈরি করুন:
+Authentication ব্যবহার করতে আগে লোকাল environment-এ প্রয়োজনীয় configuration যোগ করে MongoDB connection প্রস্তুত করুন। Configuration ও secret কখনো README, source control বা public chat-এ রাখবেন না।
+
+তারপর [http://localhost:3000](http://localhost:3000) খুলুন।
+
+## 🧪 Build ও Lint
+
 ```bash
+npm run lint
 npm run build
-npm start
 ```
 
 ---
 
-## 📄 লাইসেন্স (License)
-প্রকল্পটি CodeWarrior লাইসেন্সের অধীনে উন্মুক্ত।
+<div align="center">
+
+**বাজার দর — প্রয়োজনীয় পণ্যের দাম এক নজরে।**
+
+</div>
