@@ -74,12 +74,18 @@ npm install
 ### ২. এনভায়রনমেন্ট ভেরিয়েবল সেটআপ:
 `.env.local` ফাইলে নিচের কনফিগারেশন যোগ করুন:
 ```env
-BETTER_AUTH_SECRET=bazardor-super-secret-key-at-least-32-chars-long-2026
-BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=<generate a unique secret with: openssl rand -base64 32>
+BETTER_AUTH_URL=http://localhost:3000 # local only; use your deployed HTTPS URL on Vercel
 BETTER_AUTH_DB_URL=mongodb+srv://<username>:<password>@<cluster>/?retryWrites=true&w=majority
 ```
 
 Better Auth-এর [MongoDB adapter](https://better-auth.com/docs/adapters/mongo) সব environment-এ ব্যবহার হয়; MongoDB-তে collections স্বয়ংক্রিয়ভাবে তৈরি হবে, schema migration লাগবে না। `BETTER_AUTH_DB_URL` আবশ্যক। অ্যাপ MongoDB URI-তে নির্দিষ্ট database উপেক্ষা করে `bazar-dor` database ব্যবহার করে। Local development-এ `.env.local`-এ MongoDB connection URI যোগ করো। Vercel-এ `BETTER_AUTH_DB_URL`, production domain-সহ `BETTER_AUTH_URL` এবং শক্তিশালী `BETTER_AUTH_SECRET` Environment Variables-এ যোগ করো। `.env.local`-এর মান Vercel-এ স্বয়ংক্রিয়ভাবে যায় না।
+
+Vercel deployment-এর Environment Variables-এ `BETTER_AUTH_SECRET`, `BETTER_AUTH_DB_URL`, এবং `BETTER_AUTH_URL` Production (এবং Preview ব্যবহার করলে Preview)-এর জন্য আলাদাভাবে সেট করে নতুন deployment তৈরি করো। `BETTER_AUTH_URL`-এ `https://`-সহ আসল deployed/custom domain দাও—`http://localhost:3000` নয়। Vercel-এ URL বাদ পড়লে অ্যাপ Vercel deployment URL ব্যবহার করবে; production URL ভুল করে localhost হলে সেটিও বাদ দিয়ে Vercel URL নেওয়া হবে। Secret হিসেবে উপরের command দিয়ে তৈরি নিজস্ব random value ব্যবহার করো; `.env` বা Git-এ secret commit কোরো না।
+
+Google/GitHub sign-in চালু করতে সংশ্লিষ্ট provider-এর `BETTER_AUTH_GOOGLE_CLIENT_ID`, `BETTER_AUTH_GOOGLE_SECRET`, `BETTER_AUTH_GITHUB_CLIENT_ID`, এবং `BETTER_AUTH_GITHUB_SECRET` Vercel-এ যোগ করো। Provider credentials না থাকলেও email/password authentication চালু থাকবে। OAuth provider console-এ callback URL হিসেবে `https://<your-deployed-domain>/api/auth/callback/google` অথবা `https://<your-deployed-domain>/api/auth/callback/github` অনুমোদন করো।
+
+Deploy-এর পর signup/signin ব্যর্থ হলে Vercel-এর **Functions → `/api/auth/[...all]` → Logs**-এ সংশ্লিষ্ট request দেখো। `AUTH_SERVICE_UNAVAILABLE` বা MongoDB timeout হলে `BETTER_AUTH_DB_URL` credentials/URI যাচাই করো এবং MongoDB Atlas Network Access থেকে Vercel runtime-এ database connection অনুমোদিত কি না নিশ্চিত করো। Environment Variable পরিবর্তনের পর redeploy আবশ্যক।
 
 Local development-এ auth callback `http://localhost:3000` ব্যবহার করে, `.env`-এ production `BETTER_AUTH_URL` থাকলেও। Google OAuth local-এ পরীক্ষা করতে Google Cloud Console-এর Authorized redirect URIs-এ `http://localhost:3000/api/auth/callback/google` যোগ করো। Production-এর জন্য আলাদাভাবে deployed domain-এর `https://<your-domain>/api/auth/callback/google` যোগ করতে হবে।
 

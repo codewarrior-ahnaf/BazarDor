@@ -13,16 +13,55 @@ const globalForMongo = globalThis as typeof globalThis & {
   bazardorMongo?: MongoState;
 };
 
+function getAuthBaseURL(): string {
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000";
+  }
+
+  const configuredURL = process.env.BETTER_AUTH_URL?.trim();
+  if (configuredURL) {
+    const parsedURL = new URL(configuredURL);
+    const isLocalhost = ["localhost", "127.0.0.1", "[::1]"].includes(
+      parsedURL.hostname,
+    );
+
+    if (!isLocalhost) {
+      if (parsedURL.protocol !== "https:") {
+        throw new Error("BETTER_AUTH_URL must use HTTPS in production.");
+      }
+      return parsedURL.origin;
+    }
+
+    console.warn(
+      "[auth] Ignoring localhost BETTER_AUTH_URL in production and using the Vercel deployment URL.",
+    );
+  }
+
+  const vercelHost =
+    process.env.VERCEL_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    process.env.VERCEL_BRANCH_URL;
+  if (!vercelHost) {
+    throw new Error(
+      "BETTER_AUTH_URL must be set to the deployed HTTPS origin, or the app must run on Vercel.",
+    );
+  }
+
+  const normalizedHost = vercelHost.replace(/^https?:\/\//, "").replace(/\/+$/, "");
+  return new URL(`https://${normalizedHost}`).origin;
+}
+
 function createAuth(mongo: MongoState) {
-  const isDevelopment = process.env.NODE_ENV === "development";
   const vercelHosts = [
     process.env.VERCEL_URL,
     process.env.VERCEL_BRANCH_URL,
     process.env.VERCEL_PROJECT_PRODUCTION_URL,
   ].filter((host): host is string => Boolean(host));
-  const baseURL =
-    (isDevelopment ? "http://localhost:3000" : process.env.BETTER_AUTH_URL) ||
-    (vercelHosts[0] ? `https://${vercelHosts[0]}` : "http://localhost:3000");
+  const baseURL = getAuthBaseURL();
+  const googleClientId = process.env.BETTER_AUTH_GOOGLE_CLIENT_ID;
+  const googleClientSecret = process.env.BETTER_AUTH_GOOGLE_SECRET;
+  const githubClientId = process.env.BETTER_AUTH_GITHUB_CLIENT_ID;
+  const githubClientSecret = process.env.BETTER_AUTH_GITHUB_SECRET;
 
   return betterAuth({
     database: mongodbAdapter(mongo.client.db("bazar-dor"), {
@@ -32,7 +71,7 @@ function createAuth(mongo: MongoState) {
     trustedOrigins: [
       ...new Set([
         baseURL,
-        ...(isDevelopment
+        ...(process.env.NODE_ENV === "development"
           ? ["http://localhost:3000", "http://127.0.0.1:3000"]
           : []),
         ...vercelHosts.map((host) => `https://${host}`),
@@ -47,14 +86,22 @@ function createAuth(mongo: MongoState) {
       autoSignIn: true,
     },
     socialProviders: {
-      google: {
-        clientId: process.env.BETTER_AUTH_GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.BETTER_AUTH_GOOGLE_SECRET as string,
-      },
-      github: {
-        clientId: process.env.BETTER_AUTH_GITHUB_CLIENT_ID as string,
-        clientSecret: process.env.BETTER_AUTH_GITHUB_SECRET as string,
-      },
+      ...(googleClientId && googleClientSecret
+        ? {
+            google: {
+              clientId: googleClientId,
+              clientSecret: googleClientSecret,
+            },
+          }
+        : {}),
+      ...(githubClientId && githubClientSecret
+        ? {
+            github: {
+              clientId: githubClientId,
+              clientSecret: githubClientSecret,
+            },
+          }
+        : {}),
     },
     rateLimit: {
       enabled: true,
